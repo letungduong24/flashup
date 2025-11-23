@@ -31,7 +31,7 @@ const FlashcardDemo = () => {
         <div className="space-y-3">
           <FlashCard data={flashcardData}/>
         </div>
-        <div className="w-full">
+        <div className="w-full space-y-3">
           <PromptInputDemo />
           <AIResponseDemo />
         </div>
