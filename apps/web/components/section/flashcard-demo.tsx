@@ -26,7 +26,7 @@ const flashcardData =
 const FlashcardDemo = () => {
   return (
     <div className="z-20 flex justify-center flex-col items-center gap-3">
-      <h1 className='text-center text-2xl font-bold z-30'>Học từ vựng với Flashcard</h1>
+      <h1 className='text-center text-2xl font-bold z-30'>Học từ vựng bằng Flashcard</h1>
       <BackgroundGradient className='w-full max-w-6xl space-y-4 bg-gray-100 p-4 rounded-2xl dark:bg-zinc-800'>
         <div className="space-y-3">
           <FlashCard data={flashcardData}/>
