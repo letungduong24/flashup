@@ -14,3 +14,9 @@ export const userSchema = signUpRequestSchema.extend({
 
 export type User = z.infer<typeof userSchema>;
 
+// User response schema without password (for API responses)
+// API không trả về password nên cần schema riêng
+export const userResponseSchema = userSchema.omit({ password: true });
+
+export type UserResponse = z.infer<typeof userResponseSchema>;
+
