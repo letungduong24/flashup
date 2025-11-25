@@ -19,6 +19,9 @@ import {
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { IoMenuOutline } from "react-icons/io5";
+import useAuthStore from '@/store/auth.store';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { LogOut, User, ChevronDown } from 'lucide-react';
 
 // Types
 export interface Navbar01NavLink {
@@ -64,6 +67,7 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
     const router = useRouter();
     const [isMobile, setIsMobile] = useState(false);
     const containerRef = useRef<HTMLElement>(null);
+    const { user, loading, signout } = useAuthStore();
 
     useEffect(() => {
       const checkWidth = () => {
@@ -177,25 +181,75 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
           {/* Right side */}
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            {onSignInClick ? (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                onClick={onSignInClick}
-              >
-                {signInText}
-              </Button>
+            {!loading && user ? (
+              <>
+                <Link href="/dashboard">
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="text-sm font-medium"
+                  >
+                    Học tập
+                  </Button>
+                </Link>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback className="text-xs">
+                          {user.name?.charAt(0).toUpperCase() || 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm font-medium hidden sm:inline-block">
+                        {user.name}
+                      </span>
+                      <ChevronDown className="h-4 w-4 hidden sm:inline-block opacity-50" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="w-56 p-1">
+                    <div className="flex flex-col gap-1">
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer no-underline"
+                      >
+                        <User className="h-4 w-4" />
+                        <span>Dashboard</span>
+                      </Link>
+                      <button
+                        onClick={async () => {
+                          await signout();
+                          router.push('/');
+                        }}
+                        className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer text-left w-full"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Đăng xuất</span>
+                      </button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </>
             ) : (
-              <Link href={signInHref}>
+              onSignInClick ? (
                 <Button
                   variant="ghost"
                   size="sm"
                   className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                  onClick={onSignInClick}
                 >
                   {signInText}
                 </Button>
-              </Link>
+              ) : (
+                <Link href={signInHref}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                  >
+                    {signInText}
+                  </Button>
+                </Link>
+              )
             )}
           </div>
         </div>

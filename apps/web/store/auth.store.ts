@@ -56,11 +56,8 @@ const useAuthStore = create<AuthState>((set) => ({
     signin: async (credentials: SignInRequest) => {
         set({signInLoading: true})
         try {
-            // Validate input trước khi gửi API
             const validatedCredentials = signInRequestSchema.parse(credentials);
             const response = await api.post('/auth/login', validatedCredentials)
-            // Validate response với userResponseSchema (không có password)
-            // Đảm bảo data từ API đúng format và TypeScript biết chính xác type
             const user = userResponseSchema.parse(response.data);
             set({ user });
             toast.success('Đăng nhập thành công!')
@@ -69,10 +66,10 @@ const useAuthStore = create<AuthState>((set) => ({
             if (error.response?.data?.message) {
                 toast.error(error.response.data.message)
             } else if (error.errors) {
-                // Zod validation errors
                 toast.error('Dữ liệu không hợp lệ')
             } else {
                 toast.error('Đăng nhập thất bại')
+                console.error(error);
             }
         } finally{
             set({signInLoading: false})

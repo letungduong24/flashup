@@ -4,12 +4,12 @@ import { signUpRequestSchema } from "./signup.request";
 export const userSchema = signUpRequestSchema.extend({
   id: z.cuid(),
   birthday: z.coerce.date().optional(),
-  createdAt: z.date(),
-  updatedAt: z.date().optional(),
-  phone: z.string().optional(),
-  gender: z.string().optional(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date().optional(),
+  phone: z.string().nullish(),
+  gender: z.string().nullish(),
   role: z.enum(["USER", "ADMIN"]).default("USER"),
-  address: z.string().optional(),
+  address: z.string().nullish(),
 });
 
 export type User = z.infer<typeof userSchema>;
