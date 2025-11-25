@@ -19,5 +19,10 @@
         "@types/node": "^22.15.3",
         "eslint": "^9.39.1",
         "typescript": "5.9.2"
+    },
+    "dependencies": {
+        "@nestjs/swagger": "^11.2.3",
+        "swagger-ui-express": "^5.0.1",
+        "zod": "^4.1.13"
     }
 }
