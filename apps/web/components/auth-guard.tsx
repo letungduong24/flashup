@@ -17,59 +17,26 @@ interface AuthGuardProps {
  */
 export default function AuthGuard({ 
   children, 
+  redirectTo = '/signin',
   requireAuth = true,
-  redirectTo = '/signin'
 }: AuthGuardProps) {
   const router = useRouter();
-  const { user, loading, checkAuth } = useAuthStore();
+  const { user } = useAuthStore();
+
+  
 
   useEffect(() => {
-    // Kiểm tra auth khi component mount nếu đang loading
-    if (loading) {
-      checkAuth();
-    }
-  }, []);
-
-  useEffect(() => {
-    // Nếu đang loading, không làm gì
-    if (loading) return;
-
-    // Nếu requireAuth = true và chưa đăng nhập -> redirect
     if (requireAuth && !user) {
       router.push(redirectTo);
       return;
     }
 
-    // Nếu requireAuth = false và đã đăng nhập -> redirect về home
-    if (!requireAuth && user) {
+    if(!requireAuth && user ) {
       router.push('/');
       return;
     }
-  }, [user, loading, requireAuth, redirectTo, router]);
+  }, [user, redirectTo, router, requireAuth]);
 
-  // Hiển thị loading state
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Đang kiểm tra xác thực...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Nếu requireAuth = true và chưa đăng nhập -> không render children
-  if (requireAuth && !user) {
-    return null;
-  }
-
-  // Nếu requireAuth = false và đã đăng nhập -> không render children
-  if (!requireAuth && user) {
-    return null;
-  }
-
-  // Render children nếu thỏa điều kiện
   return <>{children}</>;
 }
 

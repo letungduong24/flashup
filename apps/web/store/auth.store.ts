@@ -32,8 +32,6 @@ const useAuthStore = create<AuthState>((set) => ({
     checkAuth: async () => {
         try {
             const response = await api.get('/auth/me');
-            // Validate response với userResponseSchema (không có password)
-            // Đảm bảo data từ API đúng format và TypeScript biết chính xác type
             const user = userResponseSchema.parse(response.data);
             set({ user });
         } catch (error: any) {
@@ -80,11 +78,8 @@ const useAuthStore = create<AuthState>((set) => ({
     signup: async (credentials: SignUpRequest) => {
         set({signUpLoading: true})
         try {
-            // Validate input trước khi gửi API
             const validatedCredentials = signUpRequestSchema.parse(credentials);
             const response = await api.post('/auth/register', validatedCredentials)
-            // Validate response với userResponseSchema (không có password)
-            // Đảm bảo data từ API đúng format và TypeScript biết chính xác type
             const user = userResponseSchema.parse(response.data);
             set({ user });
             toast.success('Đăng ký thành công!')
@@ -93,7 +88,6 @@ const useAuthStore = create<AuthState>((set) => ({
             if (error.response?.data?.message) {
                 toast.error(error.response.data.message)
             } else if (error.errors) {
-                // Zod validation errors
                 toast.error('Dữ liệu không hợp lệ')
             } else {
                 toast.error('Đăng ký thất bại')

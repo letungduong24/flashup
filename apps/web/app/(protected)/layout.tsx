@@ -1,8 +1,8 @@
-import AuthGuard from '@/components/auth-guard';
+import { DashboardWrapper } from '@/components/dashboard/dashboard-wrapper';
 
 export const metadata = {
-  title: 'ToeUp - Protected',
-  description: 'Trang được bảo vệ yêu cầu đăng nhập',
+  title: 'ToeUp - Học tập',
+  description: 'Nền tảng học tập trực tuyến giúp bạn nâng cao kiến thức và kỹ năng một cách hiệu quả.',
 };
 
 export default function ProtectedLayout({
@@ -10,10 +10,6 @@ export default function ProtectedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <AuthGuard requireAuth={true} redirectTo="/signin">
-      {children}
-    </AuthGuard>
-  );
+  return <DashboardWrapper>{children}</DashboardWrapper>;
 }
 

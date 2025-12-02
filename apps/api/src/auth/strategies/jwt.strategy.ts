@@ -14,7 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
-          // Extract JWT từ cookie
           return request?.cookies?.access_token || null;
         },
       ]),
@@ -24,12 +23,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    // Lấy user từ database dựa trên id trong payload
     const user = await this.usersService.findById(payload.sub);
     if (!user) {
       return null;
     }
-    // Trả về user object (không có password)
     return user;
   }
 }
