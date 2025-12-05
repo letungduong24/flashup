@@ -19,4 +19,35 @@ model User {
   gender    String?
   name      String?
   role      String   @default("USER")
+  folders   Folder[]
+}
+
+model Folder {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  user_id     String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  flashcards  Flashcard[]
+  user        User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model Flashcard {
+  id            String   @id @default(cuid())
+  name          String
+  meaning       String
+  folder_id     String?
+  review_count  Int      @default(0)
+  audio_url     String?
+  usage         Json?
+  is_remembered Boolean  @default(false)
+  tags          String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  folder        Folder?  @relation(fields: [folder_id], references: [id])
+
+  @@index([folder_id])
 }

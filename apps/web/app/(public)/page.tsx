@@ -6,7 +6,7 @@ import Services from "@/components/section/services";
 import TestIntroduce from "@/components/section/test-introduce";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import FlashCard from "@/components/ui/flashcard";
+import FlashCard from "@/components/flashcard/flashcard";
 import { Footer2 } from "@/components/ui/footer";
 import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams";
 import { InteractiveGridPattern } from "@/components/ui/shadcn-io/interactive-grid-pattern";

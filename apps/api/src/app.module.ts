@@ -7,13 +7,17 @@ import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { FoldersModule } from './folders/folders.module';
+import { FlashcardsModule } from './flashcards/flashcards.module';
 
 @Module({
   imports: [
     UsersModule, 
     PrismaModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    AuthModule
+    AuthModule,
+    FoldersModule,
+    FlashcardsModule
   ],
   controllers: [AppController, ],
   providers: [

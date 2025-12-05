@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import ReactCardFlip from "react-card-flip";
-import { Card } from "./card";
-import { Button } from "./button";
+import { Card } from "../ui/card";
+import { Button } from "../ui/button";
 import { LiaExchangeAltSolid } from "react-icons/lia";
-import { Badge } from "./badge";
+import { Badge } from "../ui/badge";
 import { FaVolumeLow } from "react-icons/fa6";
 
 interface FlashCardProps {

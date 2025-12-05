@@ -72,7 +72,7 @@ export const DashboardTopbar = React.forwardRef<HTMLElement, React.HTMLAttribute
       <header
         ref={combinedRef}
         className={cn(
-          'sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 md:px-6 [&_*]:no-underline',
+          'sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-background px-4 md:px-6 [&_*]:no-underline',
           className
         )}
         {...props}
@@ -121,7 +121,7 @@ export const DashboardTopbar = React.forwardRef<HTMLElement, React.HTMLAttribute
                 href="/"
                 className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
               >
-                <span className="font-bold text-xl">ToeUp</span>
+                <span className="font-bold text-xl">toeup.</span>
               </Link>
               {/* Navigation menu */}
               {!isMobile && (

@@ -1,5 +1,5 @@
 import React from 'react'
-import FlashCard from '../ui/flashcard'
+import FlashCard from '../flashcard/flashcard'
 import { describe } from 'node:test'
 import PromptInputDemo from '../ui/prompt-input-demo'
 import AIResponseDemo from '../ui/ai-response-demo'
