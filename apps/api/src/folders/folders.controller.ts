@@ -11,6 +11,7 @@ import {
   HttpCode,
   HttpStatus,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { FoldersService } from './folders.service';
 import { createZodDto } from 'nestjs-zod';
@@ -32,8 +33,21 @@ export class FoldersController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll(@Request() request) {
-    return this.foldersService.findAll(request.user.id);
+  findAll(
+    @Request() request,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('search') search?: string,
+    @Query('sort_by') sortBy?: string,
+    @Query('sort_order') sortOrder?: string,
+  ) {
+    return this.foldersService.findAll(request.user.id, {
+      page: page ? parseInt(page, 10) : 1,
+      limit: limit ? parseInt(limit, 10) : 12,
+      search,
+      sortBy: sortBy as 'name' | 'createdAt' | undefined,
+      sortOrder: sortOrder as 'asc' | 'desc' | undefined,
+    });
   }
 
   @Get(':id')

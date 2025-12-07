@@ -223,6 +223,7 @@ export type UserWhereInput = {
   name?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.StringFilter<"User"> | string
   folders?: Prisma.FolderListRelationFilter
+  studyCounts?: Prisma.StudyCountListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -237,6 +238,7 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   folders?: Prisma.FolderOrderByRelationAggregateInput
+  studyCounts?: Prisma.StudyCountOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -254,6 +256,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.StringFilter<"User"> | string
   folders?: Prisma.FolderListRelationFilter
+  studyCounts?: Prisma.StudyCountListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -300,6 +303,7 @@ export type UserCreateInput = {
   name?: string | null
   role?: string
   folders?: Prisma.FolderCreateNestedManyWithoutUserInput
+  studyCounts?: Prisma.StudyCountCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -314,6 +318,7 @@ export type UserUncheckedCreateInput = {
   name?: string | null
   role?: string
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutUserInput
+  studyCounts?: Prisma.StudyCountUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -328,6 +333,7 @@ export type UserUpdateInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   folders?: Prisma.FolderUpdateManyWithoutUserNestedInput
+  studyCounts?: Prisma.StudyCountUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -342,6 +348,7 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
+  studyCounts?: Prisma.StudyCountUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -453,6 +460,20 @@ export type UserUpdateOneRequiredWithoutFoldersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFoldersInput, Prisma.UserUpdateWithoutFoldersInput>, Prisma.UserUncheckedUpdateWithoutFoldersInput>
 }
 
+export type UserCreateNestedOneWithoutStudyCountsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStudyCountsInput, Prisma.UserUncheckedCreateWithoutStudyCountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStudyCountsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutStudyCountsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStudyCountsInput, Prisma.UserUncheckedCreateWithoutStudyCountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStudyCountsInput
+  upsert?: Prisma.UserUpsertWithoutStudyCountsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStudyCountsInput, Prisma.UserUpdateWithoutStudyCountsInput>, Prisma.UserUncheckedUpdateWithoutStudyCountsInput>
+}
+
 export type UserCreateWithoutFoldersInput = {
   id?: string
   email: string
@@ -464,6 +485,7 @@ export type UserCreateWithoutFoldersInput = {
   gender?: string | null
   name?: string | null
   role?: string
+  studyCounts?: Prisma.StudyCountCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFoldersInput = {
@@ -477,6 +499,7 @@ export type UserUncheckedCreateWithoutFoldersInput = {
   gender?: string | null
   name?: string | null
   role?: string
+  studyCounts?: Prisma.StudyCountUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFoldersInput = {
@@ -506,6 +529,7 @@ export type UserUpdateWithoutFoldersInput = {
   gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
+  studyCounts?: Prisma.StudyCountUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFoldersInput = {
@@ -519,6 +543,79 @@ export type UserUncheckedUpdateWithoutFoldersInput = {
   gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
+  studyCounts?: Prisma.StudyCountUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutStudyCountsInput = {
+  id?: string
+  email: string
+  password: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  address?: string | null
+  phone?: string | null
+  gender?: string | null
+  name?: string | null
+  role?: string
+  folders?: Prisma.FolderCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutStudyCountsInput = {
+  id?: string
+  email: string
+  password: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  address?: string | null
+  phone?: string | null
+  gender?: string | null
+  name?: string | null
+  role?: string
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutStudyCountsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutStudyCountsInput, Prisma.UserUncheckedCreateWithoutStudyCountsInput>
+}
+
+export type UserUpsertWithoutStudyCountsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutStudyCountsInput, Prisma.UserUncheckedUpdateWithoutStudyCountsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutStudyCountsInput, Prisma.UserUncheckedCreateWithoutStudyCountsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutStudyCountsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutStudyCountsInput, Prisma.UserUncheckedUpdateWithoutStudyCountsInput>
+}
+
+export type UserUpdateWithoutStudyCountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  folders?: Prisma.FolderUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutStudyCountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -528,10 +625,12 @@ export type UserUncheckedUpdateWithoutFoldersInput = {
 
 export type UserCountOutputType = {
   folders: number
+  studyCounts: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   folders?: boolean | UserCountOutputTypeCountFoldersArgs
+  studyCounts?: boolean | UserCountOutputTypeCountStudyCountsArgs
 }
 
 /**
@@ -551,6 +650,13 @@ export type UserCountOutputTypeCountFoldersArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.FolderWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountStudyCountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StudyCountWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -564,6 +670,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   role?: boolean
   folders?: boolean | Prisma.User$foldersArgs<ExtArgs>
+  studyCounts?: boolean | Prisma.User$studyCountsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -609,6 +716,7 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "createdAt" | "updatedAt" | "address" | "phone" | "gender" | "name" | "role", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   folders?: boolean | Prisma.User$foldersArgs<ExtArgs>
+  studyCounts?: boolean | Prisma.User$studyCountsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -618,6 +726,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     folders: Prisma.$FolderPayload<ExtArgs>[]
+    studyCounts: Prisma.$StudyCountPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1025,6 +1134,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   folders<T extends Prisma.User$foldersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$foldersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  studyCounts<T extends Prisma.User$studyCountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studyCountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudyCountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1473,6 +1583,30 @@ export type User$foldersArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.FolderScalarFieldEnum | Prisma.FolderScalarFieldEnum[]
+}
+
+/**
+ * User.studyCounts
+ */
+export type User$studyCountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StudyCount
+   */
+  select?: Prisma.StudyCountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StudyCount
+   */
+  omit?: Prisma.StudyCountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StudyCountInclude<ExtArgs> | null
+  where?: Prisma.StudyCountWhereInput
+  orderBy?: Prisma.StudyCountOrderByWithRelationInput | Prisma.StudyCountOrderByWithRelationInput[]
+  cursor?: Prisma.StudyCountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StudyCountScalarFieldEnum | Prisma.StudyCountScalarFieldEnum[]
 }
 
 /**

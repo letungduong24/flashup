@@ -39,8 +39,23 @@ export class FlashcardsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll(@Request() request, @Query('folder_id') folderId?: string) {
-    return this.flashcardsService.findAll(request.user.id, folderId);
+  findAll(
+    @Request() request,
+    @Query('folder_id') folderId?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('search') search?: string,
+    @Query('sort_by') sortBy?: string,
+    @Query('sort_order') sortOrder?: string,
+  ) {
+    return this.flashcardsService.findAll(request.user.id, {
+      folderId,
+      page: page ? parseInt(page, 10) : 1,
+      limit: limit ? parseInt(limit, 10) : 12,
+      search,
+      sortBy: sortBy as 'name' | 'createdAt' | 'review_count' | undefined,
+      sortOrder: sortOrder as 'asc' | 'desc' | undefined,
+    });
   }
 
   @Get(':id')

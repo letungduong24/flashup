@@ -47,13 +47,36 @@ export class FlashcardsService {
         review_count: flashcardRequest.review_count ?? 0,
         audio_url: audioUrl ?? null,
         usage: flashcardRequest.usage === null ? Prisma.JsonNull : flashcardRequest.usage,
-        is_remembered: flashcardRequest.is_remembered ?? false,
+        status: flashcardRequest.status ?? 'new',
+        interval: flashcardRequest.interval ?? 0,
+        nextReview: flashcardRequest.nextReview || null,
+        easeFactor: flashcardRequest.easeFactor ?? 2.5,
+        lapseCount: flashcardRequest.lapseCount ?? 0,
         tags: flashcardRequest.tags ?? [],
       },
     });
   }
 
-  async findAll(userId: string, folderId?: string) {
+  async findAll(
+    userId: string,
+    options: {
+      folderId?: string;
+      page?: number;
+      limit?: number;
+      search?: string;
+      sortBy?: 'name' | 'createdAt' | 'review_count';
+      sortOrder?: 'asc' | 'desc';
+    } = {},
+  ) {
+    const {
+      folderId,
+      page = 1,
+      limit = 12,
+      search,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+    } = options;
+
     const where: any = {};
 
     if (folderId) {
@@ -82,12 +105,40 @@ export class FlashcardsService {
       where.folder_id = { in: folderIds };
     }
 
-    return this.prisma.flashcard.findMany({
+    // Search filter
+    if (search && search.trim()) {
+      where.OR = [
+        { name: { contains: search.trim(), mode: 'insensitive' } },
+        { meaning: { contains: search.trim(), mode: 'insensitive' } },
+      ];
+    }
+
+    // Calculate skip for pagination
+    const skip = (page - 1) * limit;
+
+    // Get total count
+    const total = await this.prisma.flashcard.count({ where });
+
+    // Get paginated data
+    const data = await this.prisma.flashcard.findMany({
       where,
       orderBy: {
-        createdAt: 'desc',
+        [sortBy]: sortOrder,
       },
+      skip,
+      take: limit,
     });
+
+    return {
+      data,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasMore: skip + data.length < total,
+      },
+    };
   }
 
   async findOne(userId: string, id: string) {
@@ -163,7 +214,6 @@ export class FlashcardsService {
     const updateData: any = {
       name: flashcardRequest.name,
       meaning: flashcardRequest.meaning,
-      is_remembered: flashcardRequest.is_remembered,
       tags: flashcardRequest.tags,
     };
 
@@ -179,6 +229,21 @@ export class FlashcardsService {
     }
     if (flashcardRequest.folder_id !== undefined) {
       updateData.folder_id = flashcardRequest.folder_id || null;
+    }
+    if (flashcardRequest.status !== undefined) {
+      updateData.status = flashcardRequest.status;
+    }
+    if (flashcardRequest.interval !== undefined) {
+      updateData.interval = flashcardRequest.interval;
+    }
+    if (flashcardRequest.nextReview !== undefined) {
+      updateData.nextReview = flashcardRequest.nextReview || null;
+    }
+    if (flashcardRequest.easeFactor !== undefined) {
+      updateData.easeFactor = flashcardRequest.easeFactor;
+    }
+    if (flashcardRequest.lapseCount !== undefined) {
+      updateData.lapseCount = flashcardRequest.lapseCount;
     }
 
     const updatedFlashcard = await this.prisma.flashcard.update({
@@ -220,7 +285,10 @@ export class FlashcardsService {
       usage: generated.usage,
       tags: generated.tags,
       audio_url: audioUrl,
-      is_remembered: false,
+      status: 'new',
+      interval: 0,
+      easeFactor: 2.5,
+      lapseCount: 0,
     } as FlashcardRequest;
   }
 

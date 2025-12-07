@@ -7,18 +7,40 @@ import {
   FlashcardRequest,
   flashcardRequestSchema,
   flashcardResponseSchema,
+  Pagination,
+  FlashcardFilters,
 } from '@repo/types';
+
+type StudyAction = 
+  | 'new_forgot'
+  | 'new_good'
+  | 'review_forgot'
+  | 'review_hard'
+  | 'review_normal'
+  | 'review_easy';
+
+interface StudyStatistics {
+  reviewCount: number;
+  newCount: number;
+}
 
 interface FlashcardState {
   flashcards: FlashcardResponse[];
   currentFlashcard: FlashcardResponse | null;
+  pagination: Pagination | null;
+  filters: FlashcardFilters;
   loading: boolean;
+  loadingMore: boolean;
   createLoading: boolean;
   updateLoading: boolean;
   deleteLoading: boolean;
+  studyLoading: boolean;
+  studyStatistics: StudyStatistics | null;
   
   // Actions
-  fetchFlashcards: (folderId?: string) => Promise<void>;
+  fetchFlashcards: (folderId?: string, resetFilters?: boolean) => Promise<void>;
+  loadMoreFlashcards: (folderId?: string) => Promise<void>;
+  setFilters: (filters: FlashcardFilters) => void;
   getFlashcard: (id: string) => Promise<void>;
   createFlashcard: (flashcardRequest: FlashcardRequest) => Promise<void>;
   updateFlashcard: (id: string, flashcardRequest: FlashcardRequest) => Promise<void>;
@@ -26,24 +48,56 @@ interface FlashcardState {
   checkAudio: (word: string) => Promise<{ hasAudio: boolean; wordExists: boolean; audioUrl: string | null }>;
   setCurrentFlashcard: (flashcard: FlashcardResponse | null) => void;
   clearFlashcards: () => void;
+  
+  // Study actions
+  getNextFlashcardToStudy: (folderId?: string) => Promise<FlashcardResponse | null>;
+  handleStudyAction: (flashcardId: string, action: StudyAction) => Promise<FlashcardResponse>;
 }
 
 const useFlashcardStore = create<FlashcardState>((set, get) => ({
   flashcards: [],
   currentFlashcard: null,
+  pagination: null,
+  filters: {},
   loading: false,
+  loadingMore: false,
   createLoading: false,
   updateLoading: false,
   deleteLoading: false,
+  studyLoading: false,
+  studyStatistics: null,
+
+  // Set filters
+  setFilters: (filters: FlashcardFilters) => {
+    set({ filters });
+  },
 
   // Fetch all flashcards (optionally filtered by folder)
-  fetchFlashcards: async (folderId?: string) => {
+  fetchFlashcards: async (folderId?: string, resetFilters = false) => {
+    const { filters } = get();
+    const currentFilters = resetFilters ? {} : filters;
+    
+    if (resetFilters) {
+      set({ filters: {} });
+    }
+    
     set({ loading: true });
     try {
-      const params = folderId ? { folder_id: folderId } : {};
+      const params: Record<string, any> = {
+        page: 1,
+        limit: 12,
+        ...(folderId && { folder_id: folderId }),
+        ...(currentFilters.search && { search: currentFilters.search }),
+        ...(currentFilters.isRemembered !== undefined && { is_remembered: currentFilters.isRemembered }),
+        ...(currentFilters.sortBy && { sort_by: currentFilters.sortBy }),
+        ...(currentFilters.sortOrder && { sort_order: currentFilters.sortOrder }),
+      };
+      
       const response = await api.get('/flashcards', { params });
-      const flashcards = z.array(flashcardResponseSchema).parse(response.data);
-      set({ flashcards });
+      const flashcards = z.array(flashcardResponseSchema).parse(response.data.data);
+      const pagination = response.data.pagination as Pagination;
+      
+      set({ flashcards, pagination });
     } catch (error: any) {
       if (error.response?.data?.message) {
         toast.error(error.response.data.message);
@@ -51,9 +105,47 @@ const useFlashcardStore = create<FlashcardState>((set, get) => ({
         toast.error('Không thể tải danh sách flashcard');
         console.error(error);
       }
-      set({ flashcards: [] });
+      set({ flashcards: [], pagination: null });
     } finally {
       set({ loading: false });
+    }
+  },
+
+  // Load more flashcards (infinite scroll)
+  loadMoreFlashcards: async (folderId?: string) => {
+    const { pagination, flashcards, filters, loadingMore } = get();
+    
+    if (!pagination || !pagination.hasMore || loadingMore) return;
+    
+    set({ loadingMore: true });
+    try {
+      const params: Record<string, any> = {
+        page: pagination.page + 1,
+        limit: pagination.limit,
+        ...(folderId && { folder_id: folderId }),
+        ...(filters.search && { search: filters.search }),
+        ...(filters.isRemembered !== undefined && { is_remembered: filters.isRemembered }),
+        ...(filters.sortBy && { sort_by: filters.sortBy }),
+        ...(filters.sortOrder && { sort_order: filters.sortOrder }),
+      };
+      
+      const response = await api.get('/flashcards', { params });
+      const newFlashcards = z.array(flashcardResponseSchema).parse(response.data.data);
+      const newPagination = response.data.pagination as Pagination;
+      
+      set({ 
+        flashcards: [...flashcards, ...newFlashcards], 
+        pagination: newPagination 
+      });
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Không thể tải thêm flashcard');
+        console.error(error);
+      }
+    } finally {
+      set({ loadingMore: false });
     }
   },
 
@@ -192,6 +284,82 @@ const useFlashcardStore = create<FlashcardState>((set, get) => ({
   // Clear flashcards
   clearFlashcards: () => {
     set({ flashcards: [], currentFlashcard: null });
+  },
+
+  // Get next flashcard to study
+  getNextFlashcardToStudy: async (folderId?: string) => {
+    set({ studyLoading: true });
+    try {
+      const params: Record<string, any> = {};
+      if (folderId) {
+        params.folderId = folderId;
+      }
+      
+      const response = await api.get('/study/flashcards/next', { params });
+      
+      // Response format: { flashcard: Flashcard | null, statistics: { reviewCount: number, newCount: number } }
+      const result = response.data;
+      
+      // Update statistics
+      if (result?.statistics) {
+        set({ studyStatistics: result.statistics });
+      }
+      
+      // Nếu flashcard là null, không có flashcard nào cần học
+      if (!result?.flashcard) {
+        return null;
+      }
+      
+      const flashcard = flashcardResponseSchema.parse(result.flashcard);
+      return flashcard;
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Không thể tải flashcard cần học');
+        console.error(error);
+      }
+      throw error;
+    } finally {
+      set({ studyLoading: false });
+    }
+  },
+
+  // Handle study action
+  handleStudyAction: async (flashcardId: string, action: StudyAction) => {
+    set({ studyLoading: true });
+    try {
+      const response = await api.post(`/study/flashcards/${flashcardId}/answer`, {
+        action,
+      });
+      const updatedFlashcard = flashcardResponseSchema.parse(response.data);
+      
+      // Update in flashcards list if exists
+      const flashcards = get().flashcards;
+      const index = flashcards.findIndex(f => f.id === flashcardId);
+      if (index !== -1) {
+        flashcards[index] = updatedFlashcard;
+        set({ flashcards });
+      }
+      
+      // Update current flashcard if it's the same
+      const currentFlashcard = get().currentFlashcard;
+      if (currentFlashcard?.id === flashcardId) {
+        set({ currentFlashcard: updatedFlashcard });
+      }
+      
+      return updatedFlashcard;
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Không thể xử lý hành động học');
+        console.error(error);
+      }
+      throw error;
+    } finally {
+      set({ studyLoading: false });
+    }
   },
 }));
 

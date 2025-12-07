@@ -10,7 +10,11 @@ export const flashcardSchema = z.object({
   review_count: z.number().int().nonnegative().default(0),
   audio_url: z.string().nullable().optional(),
   usage: z.array(usageSchema).nullable().optional(),
-  is_remembered: z.boolean().default(false),
+  status: z.enum(["new", "review"]).default("new"),
+  interval: z.number().nonnegative().default(0), // số ngày chờ đến lần review tiếp theo
+  nextReview: z.coerce.date().nullable().optional(), // thời điểm review tiếp theo
+  easeFactor: z.number().min(1.3).default(2.5), // độ dễ của thẻ, min 1.3
+  lapseCount: z.number().int().nonnegative().default(0), // tổng số lần quên
   tags: z.array(z.string()).default([]),
 });
 
@@ -22,7 +26,11 @@ export const flashcardRequestSchema = flashcardSchema.omit({
   review_count: true,
 }).extend({
   review_count: z.number().int().nonnegative().optional(),
-  is_remembered: z.boolean().default(false).optional(),
+  status: z.enum(["new", "review"]).optional(),
+  interval: z.number().nonnegative().optional(),
+  nextReview: z.coerce.date().nullable().optional(),
+  easeFactor: z.number().min(1.3).optional(),
+  lapseCount: z.number().int().nonnegative().optional(),
   tags: z.array(z.string()).default([]).optional(),
 });
 

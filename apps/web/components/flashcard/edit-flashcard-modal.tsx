@@ -55,7 +55,6 @@ const EditFlashcardModal: React.FC<EditFlashcardModalProps> = ({
       folder_id: undefined,
       usage: [],
       tags: [],
-      is_remembered: false,
     },
   });
 
@@ -83,7 +82,6 @@ const EditFlashcardModal: React.FC<EditFlashcardModalProps> = ({
         folder_id: flashcard.folder_id || undefined,
         usage: flashcard.usage || [],
         tags: flashcard.tags || [],
-        is_remembered: flashcard.is_remembered,
       });
       setTags(flashcard.tags || []);
       setAudioCheck({ checking: false, hasAudio: null, wordExists: null });

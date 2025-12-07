@@ -1,27 +1,36 @@
 import React from 'react'
 import FlashCard from '../flashcard/flashcard'
-import { describe } from 'node:test'
+import { FlashcardResponse } from '@repo/types'
 import PromptInputDemo from '../ui/prompt-input-demo'
 import AIResponseDemo from '../ui/ai-response-demo'
 import { BackgroundGradient } from '../ui/shadcn-io/background-gradient'
 
-const flashcardData = 
-  {
-    word: "Aberration",
-    meaning: "Sự sai lệch khỏi tiêu chuẩn",
-    description: [
-      {
-        usage: "Nghĩa chung, hành vi sai lệch / khác thường",
-        example: "The scientist noted an aberration in the data that required further investigation.",
-        translation: "Nhà khoa học đã ghi nhận một sự sai lệch trong dữ liệu cần được điều tra thêm." 
-      },
-      {
-        usage: "Trong khoa học / quang học",
-        example: "The telescope's lens suffered from chromatic aberration, causing the stars to appear blurred.",
-        translation: "Ống kính của kính viễn vọng bị lỗi quang sai màu, làm các ngôi sao trông mờ." 
-      }
-    ]
-  }
+const flashcardData: FlashcardResponse = {
+  id: 'clx1234567890abcdefghij',
+  name: "Aberration",
+  meaning: "Sự sai lệch khỏi tiêu chuẩn",
+  review_count: 3,
+  status: "new",
+  interval: 0,
+  nextReview: null,
+  easeFactor: 2.5,
+  lapseCount: 0,
+  tags: ["noun", "science"],
+  folder_id: null,
+  audio_url: null,
+  usage: [
+    {
+      note: "Nghĩa chung, hành vi sai lệch / khác thường",
+      example: "The scientist noted an aberration in the data that required further investigation.",
+      translate: "Nhà khoa học đã ghi nhận một sự sai lệch trong dữ liệu cần được điều tra thêm." 
+    },
+    {
+      note: "Trong khoa học / quang học",
+      example: "The telescope's lens suffered from chromatic aberration, causing the stars to appear blurred.",
+      translate: "Ống kính của kính viễn vọng bị lỗi quang sai màu, làm các ngôi sao trông mờ." 
+    }
+  ]
+}
 
 const FlashcardDemo = () => {
   return (
@@ -29,7 +38,7 @@ const FlashcardDemo = () => {
       <h1 className='text-center text-2xl font-bold z-30'>Học từ vựng với Flashcard</h1>
       <BackgroundGradient className='w-full max-w-6xl space-y-4 bg-gray-100 p-4 rounded-2xl dark:bg-zinc-800'>
         <div className="space-y-3">
-          <FlashCard data={flashcardData}/>
+          <FlashCard flashcard={flashcardData} isMock={true}/>
         </div>
         <div className="w-full space-y-3">
           <PromptInputDemo />

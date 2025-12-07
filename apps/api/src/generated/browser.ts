@@ -32,3 +32,8 @@ export type Folder = Prisma.FolderModel
  * 
  */
 export type Flashcard = Prisma.FlashcardModel
+/**
+ * Model StudyCount
+ * 
+ */
+export type StudyCount = Prisma.StudyCountModel

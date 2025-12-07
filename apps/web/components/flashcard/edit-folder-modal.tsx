@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FolderRequest, folderRequestSchema } from '@repo/types';
+import { FolderRequest, folderRequestSchema, FolderResponse } from '@repo/types';
 import {
   Dialog,
   DialogContent,
@@ -23,23 +23,26 @@ import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 import useFolderStore from '@/store/folder.store';
 
-interface CreateFolderModalProps {
+interface EditFolderModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  folder: FolderResponse | null;
   onSuccess?: () => void;
 }
 
-const CreateFolderModal: React.FC<CreateFolderModalProps> = ({
+const EditFolderModal: React.FC<EditFolderModalProps> = ({
   open,
   onOpenChange,
+  folder,
   onSuccess,
 }) => {
-  const { createFolder, createLoading } = useFolderStore();
+  const { updateFolder, updateLoading } = useFolderStore();
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<FolderRequest>({
     resolver: zodResolver(folderRequestSchema),
     defaultValues: {
@@ -48,12 +51,29 @@ const CreateFolderModal: React.FC<CreateFolderModalProps> = ({
     },
   });
 
+  useEffect(() => {
+    if (open && folder) {
+      reset({
+        name: folder.name,
+        description: folder.description || undefined,
+      });
+    } else if (!open) {
+      reset({
+        name: '',
+        description: undefined,
+      });
+    }
+  }, [open, folder, reset]);
+
   const onSubmit = async (data: FolderRequest) => {
+    if (!folder) return;
     try {
-      await createFolder(data);
+      await updateFolder(folder.id, data);
       reset();
       onOpenChange(false);
-      onSuccess?.();
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error) {
       // Error đã được xử lý trong store
     }
@@ -67,22 +87,22 @@ const CreateFolderModal: React.FC<CreateFolderModalProps> = ({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[500px] p-0">
-        <DialogTitle className="sr-only">Tạo Flashbook mới</DialogTitle>
+        <DialogTitle className="sr-only">Sửa bộ sưu tập</DialogTitle>
         <Card className="w-full border-0 shadow-none">
           <CardHeader>
-            <CardTitle>Tạo Flashbook mới</CardTitle>
+            <CardTitle>Sửa bộ sưu tập</CardTitle>
             <CardDescription>
-              Tạo một Flashbook mới để bắt đầu học.
+              Cập nhật thông tin của bộ sưu tập flashcard.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="name">Tên Flashbook *</Label>
+                  <Label htmlFor="name">Tên bộ sưu tập *</Label>
                   <Input
                     id="name"
-                    placeholder="Nhập tên Flashbook"
+                    placeholder="Nhập tên bộ sưu tập"
                     {...register('name')}
                     aria-invalid={errors.name ? 'true' : 'false'}
                     required
@@ -116,16 +136,16 @@ const CreateFolderModal: React.FC<CreateFolderModalProps> = ({
               type="submit"
               className="w-full"
               onClick={handleSubmit(onSubmit)}
-              disabled={createLoading}
+              disabled={updateLoading}
             >
-              {createLoading ? 'Đang tạo...' : 'Tạo Flashbook'}
+              {updateLoading ? 'Đang cập nhật...' : 'Cập nhật'}
             </Button>
             <Button
               type="button"
               variant="outline"
               className="w-full"
               onClick={handleClose}
-              disabled={createLoading}
+              disabled={updateLoading}
             >
               Hủy
             </Button>
@@ -136,5 +156,5 @@ const CreateFolderModal: React.FC<CreateFolderModalProps> = ({
   );
 };
 
-export default CreateFolderModal;
+export default EditFolderModal;
 

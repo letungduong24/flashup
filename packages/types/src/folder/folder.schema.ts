@@ -23,13 +23,16 @@ export const folderRequestSchema = folderSchema.omit({
 
 export type FolderRequest = z.infer<typeof folderRequestSchema>;
 
-// Folder response schema (same as base for now)
-export const folderResponseSchema = folderSchema;
+// Folder response schema (extends base with statistics)
+export const folderResponseSchema = folderSchema.extend({
+  newCount: z.number().int().nonnegative().default(0),
+  reviewCount: z.number().int().nonnegative().default(0),
+});
 
 export type FolderResponse = z.infer<typeof folderResponseSchema>;
 
 // Folder with flashcards schema (for detailed view)
-export const folderWithFlashcardsSchema = folderSchema.extend({
+export const folderWithFlashcardsSchema = folderResponseSchema.extend({
   flashcards: z.array(flashcardResponseSchema).optional(),
 });
 

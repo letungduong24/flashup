@@ -386,7 +386,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Folder: 'Folder',
-  Flashcard: 'Flashcard'
+  Flashcard: 'Flashcard',
+  StudyCount: 'StudyCount'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "folder" | "flashcard"
+    modelProps: "user" | "folder" | "flashcard" | "studyCount"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -628,6 +629,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    StudyCount: {
+      payload: Prisma.$StudyCountPayload<ExtArgs>
+      fields: Prisma.StudyCountFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StudyCountFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StudyCountFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload>
+        }
+        findFirst: {
+          args: Prisma.StudyCountFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StudyCountFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload>
+        }
+        findMany: {
+          args: Prisma.StudyCountFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload>[]
+        }
+        create: {
+          args: Prisma.StudyCountCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload>
+        }
+        createMany: {
+          args: Prisma.StudyCountCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StudyCountCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload>[]
+        }
+        delete: {
+          args: Prisma.StudyCountDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload>
+        }
+        update: {
+          args: Prisma.StudyCountUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload>
+        }
+        deleteMany: {
+          args: Prisma.StudyCountDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StudyCountUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StudyCountUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload>[]
+        }
+        upsert: {
+          args: Prisma.StudyCountUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyCountPayload>
+        }
+        aggregate: {
+          args: Prisma.StudyCountAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStudyCount>
+        }
+        groupBy: {
+          args: Prisma.StudyCountGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudyCountGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StudyCountCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudyCountCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -703,13 +778,30 @@ export const FlashcardScalarFieldEnum = {
   review_count: 'review_count',
   audio_url: 'audio_url',
   usage: 'usage',
-  is_remembered: 'is_remembered',
+  status: 'status',
+  interval: 'interval',
+  nextReview: 'nextReview',
+  easeFactor: 'easeFactor',
+  lapseCount: 'lapseCount',
   tags: 'tags',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type FlashcardScalarFieldEnum = (typeof FlashcardScalarFieldEnum)[keyof typeof FlashcardScalarFieldEnum]
+
+
+export const StudyCountScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  newCount: 'newCount',
+  reviewCount: 'reviewCount',
+  day: 'day',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudyCountScalarFieldEnum = (typeof StudyCountScalarFieldEnum)[keyof typeof StudyCountScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -816,13 +908,6 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -917,6 +1002,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   folder?: Prisma.FolderOmit
   flashcard?: Prisma.FlashcardOmit
+  studyCount?: Prisma.StudyCountOmit
 }
 
 /* Types for Logging */

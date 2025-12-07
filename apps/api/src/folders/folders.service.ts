@@ -13,23 +13,115 @@ export class FoldersService {
   ) {}
 
   async create(userId: string, folderRequest: FolderRequest) {
-    return this.prisma.folder.create({
+    const folder = await this.prisma.folder.create({
       data: {
         ...folderRequest,
         user_id: userId,
       },
     });
+
+    // New folder has 0 new and review cards
+    return {
+      ...folder,
+      newCount: 0,
+      reviewCount: 0,
+    };
   }
 
-  async findAll(userId: string) {
-    return this.prisma.folder.findMany({
+  /**
+   * Calculate newCount and reviewCount for a folder
+   */
+  private async getFolderStatistics(folderId: string) {
+    const now = new Date();
+
+    // Count new cards
+    const newCount = await this.prisma.flashcard.count({
       where: {
-        user_id: userId,
-      },
-      orderBy: {
-        createdAt: 'desc',
+        folder_id: folderId,
+        status: 'new',
       },
     });
+
+    // Count review cards that need to be studied (nextReview <= now)
+    const reviewCount = await this.prisma.flashcard.count({
+      where: {
+        folder_id: folderId,
+        status: 'review',
+        nextReview: {
+          lte: now,
+          not: null,
+        },
+      },
+    });
+
+    return { newCount, reviewCount };
+  }
+
+  async findAll(
+    userId: string,
+    options: {
+      page?: number;
+      limit?: number;
+      search?: string;
+      sortBy?: 'name' | 'createdAt';
+      sortOrder?: 'asc' | 'desc';
+    } = {},
+  ) {
+    const {
+      page = 1,
+      limit = 12,
+      search,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+    } = options;
+
+    const where: any = {
+      user_id: userId,
+    };
+
+    // Search filter
+    if (search && search.trim()) {
+      where.name = { contains: search.trim(), mode: 'insensitive' };
+    }
+
+    // Calculate skip for pagination
+    const skip = (page - 1) * limit;
+
+    // Get total count
+    const total = await this.prisma.folder.count({ where });
+
+    // Get paginated data
+    const folders = await this.prisma.folder.findMany({
+      where,
+      orderBy: {
+        [sortBy]: sortOrder,
+      },
+      skip,
+      take: limit,
+    });
+
+    // Calculate statistics for each folder
+    const data = await Promise.all(
+      folders.map(async (folder) => {
+        const { newCount, reviewCount } = await this.getFolderStatistics(folder.id);
+        return {
+          ...folder,
+          newCount,
+          reviewCount,
+        };
+      })
+    );
+
+    return {
+      data,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasMore: skip + data.length < total,
+      },
+    };
   }
 
   async findOne(userId: string, id: string) {
@@ -48,7 +140,14 @@ export class FoldersService {
       throw new ForbiddenException('Bạn không có quyền truy cập folder này');
     }
 
-    return folder
+    // Calculate statistics
+    const { newCount, reviewCount } = await this.getFolderStatistics(id);
+
+    return {
+      ...folder,
+      newCount,
+      reviewCount,
+    };
   }
 
   async update(userId: string, id: string, folderRequest: FolderRequest) {
@@ -69,7 +168,14 @@ export class FoldersService {
       data: folderRequest,
     });
 
-    return updatedFolder;
+    // Calculate statistics
+    const { newCount, reviewCount } = await this.getFolderStatistics(id);
+
+    return {
+      ...updatedFolder,
+      newCount,
+      reviewCount,
+    };
   }
 
   async remove(userId: string, id: string) {
@@ -126,16 +232,22 @@ export class FoldersService {
             usage: flashcardData.usage === null ? Prisma.JsonNull : flashcardData.usage,
             tags: flashcardData.tags || [],
             review_count: 0,
-            is_remembered: false,
+            status: 'new',
+            interval: 0,
+            easeFactor: 2.5,
+            lapseCount: 0,
           },
         });
       })
     );
 
-    // Return folder with flashcards
+    // Return folder with flashcards and statistics
+    // All newly created flashcards have status 'new'
     return {
       ...folder,
       flashcards,
+      newCount: flashcards.length,
+      reviewCount: 0,
     };
   }
 }

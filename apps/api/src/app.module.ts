@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { FoldersModule } from './folders/folders.module';
 import { FlashcardsModule } from './flashcards/flashcards.module';
+import { StudyModule } from './study/study.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { FlashcardsModule } from './flashcards/flashcards.module';
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     FoldersModule,
-    FlashcardsModule
+    FlashcardsModule,
+    StudyModule
   ],
   controllers: [AppController, ],
   providers: [

@@ -80,9 +80,13 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
       folder_id: flashcard.folder_id || undefined,
       audio_url: flashcard.audio_url || undefined,
       usage: flashcard.usage || undefined,
-      is_remembered: flashcard.is_remembered,
       tags: flashcard.tags,
       review_count: 0,
+      interval: 0,
+      easeFactor: 2.5,
+      lapseCount: 0,
+      status: "new",
+      nextReview: null,
     });
   };
 
@@ -90,8 +94,9 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto mx-4" showCloseButton={false}>
-        <DialogHeader>
+      <DialogContent className="max-w-2xl max-h-[85vh] mx-4 flex flex-col overflow-hidden" showCloseButton={false}>
+        {/* Header cố định */}
+        <DialogHeader className="flex-shrink-0">
           <div className="flex items-center justify-center gap-2">
             <DialogTitle className="text-2xl font-bold text-center">
               {flashcard.name}
@@ -105,58 +110,66 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
             </Button>
           </div>
         </DialogHeader>
+
+        {/* Nghĩa - cố định */}
+        <div className="flex-shrink-0 text-center py-2 border-b">
+          <p className="text-base text-muted-foreground">{flashcard.meaning}</p>
+        </div>
         
-        <Card className="w-full rounded-2xl p-6 flex flex-col items-center justify-center">
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-xl font-bold text-center">{flashcard.meaning}</h2>
-          </div>
-          
-          {flashcard.usage && flashcard.usage.length > 0 && (
-            <div className="w-full space-y-4">
-              {flashcard.usage.map((usage, index) => (
-                <div key={index} className="mt-4 w-full">
-                  {usage.note && (
-                    <h3 className="text-xl font-semibold">{usage.note}</h3>
-                  )}
-                  {usage.example && (
-                    <p className="mt-2 italic">"{usage.example}"</p>
-                  )}
-                  {usage.translate && (
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {usage.translate}
-                    </p>
-                  )}
+        {/* Nội dung scroll được */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="w-full flex flex-col gap-4 items-center justify-center border-0 ">
+            {flashcard.usage && flashcard.usage.length > 0 && (
+              <div className="w-full space-y-2">
+                {flashcard.usage.map((usage, index) => (
+                  <div key={index} className="w-full">
+                    {usage.note && (
+                      <h3 className="text-lg font-semibold">{usage.note}</h3>
+                    )}
+                    {usage.example && (
+                      <p className="mt-2 italic">"{usage.example}"</p>
+                    )}
+                    {usage.translate && (
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {usage.translate}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            <div className="flex items-center justify-center gap-4">
+              <div className="text-sm text-muted-foreground">
+                Đã học {flashcard.review_count} lần
+              </div>
+              <div className="text-xs px-2 py-1 flex justify-center items-center bg-blue-600 text-white font-bold rounded-2xl">
+                {flashcard.status === "new" ? "Mới" : "Ôn tập"}
+              </div>
+              {flashcard.lapseCount > 0 && (
+                <div className="text-xs px-2 py-1 flex justify-center items-center bg-red-600 text-white font-bold rounded-2xl">
+                  Quên {flashcard.lapseCount} lần
                 </div>
-              ))}
+              )}
             </div>
-          )}
-          
-          <div className="mt-6 flex items-center justify-center gap-4">
-            <div className="text-sm text-muted-foreground">
-              Đã học {flashcard.review_count} lần
-            </div>
-            {flashcard.is_remembered && (
-              <div className="text-xs px-2 py-1 flex justify-center items-center bg-green-600 text-white font-bold rounded-2xl">
-                Đã nhớ
+            
+            {flashcard.tags && flashcard.tags.length > 0 && (
+              <div className=" flex flex-wrap gap-2 justify-center">
+                {flashcard.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-md"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             )}
           </div>
-          
-          {flashcard.tags && flashcard.tags.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2 justify-center">
-              {flashcard.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-md"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-        </Card>
+        </div>
 
-        <div className="flex justify-center mt-2">
+        {/* Footer cố định */}
+        <div className="flex-shrink-0 flex justify-center pt-4 border-t">
           <ButtonGroup>
             <Button 
               variant="outline" 

@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '../ui/dialog';
+import { PiStarFour } from "react-icons/pi";
 import {
   Card,
   CardContent,
@@ -26,6 +27,8 @@ import { FaPlus, FaTrash } from 'react-icons/fa';
 import { CheckCircle2, XCircle, Loader2, Sparkles } from 'lucide-react';
 import api from '@/lib/axios';
 import { toast } from 'sonner';
+import { BackgroundGradient } from '../ui/shadcn-io/background-gradient';
+import { motion } from 'framer-motion';
 
 interface CreateFlashcardModalProps {
   open: boolean;
@@ -50,14 +53,13 @@ const CreateFlashcardModal: React.FC<CreateFlashcardModalProps> = ({
     watch,
     setValue,
   } = useForm<FlashcardRequest>({
-    resolver: zodResolver(flashcardRequestSchema),
+    resolver: zodResolver(flashcardRequestSchema) as any,
     defaultValues: {
       name: '',
       meaning: '',
       folder_id: folderId || undefined,
       usage: [],
       tags: [] as string[],
-      is_remembered: false as boolean,
     },
   });
 
@@ -191,42 +193,54 @@ const CreateFlashcardModal: React.FC<CreateFlashcardModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[600px] p-0 max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] p-0 bg-transparent border-0 max-h-[90vh]">
         <DialogTitle className="sr-only">Tạo flashcard mới</DialogTitle>
-        <Card className="w-full border-0 shadow-none">
-          <CardHeader>
+        <BackgroundGradient className='w-full bg-gray-100 rounded-3xl dark:bg-zinc-800 flex flex-col max-h-[85vh]' show={generating}>
+          <Card className="w-full border-0 shadow-none bg-transparent flex flex-col overflow-hidden">
+            <CardHeader className="flex-shrink-0">
             <CardTitle>Tạo flashcard mới</CardTitle>
             <CardDescription>
               Tạo một flashcard mới để học từ vựng.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+            <CardContent className="flex-1 overflow-y-auto">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="name">Từ *</Label>
                     {wordValue && wordValue.trim().length >= 2 && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={handleGenerate}
-                        disabled={generating || createLoading}
-                        className="text-xs"
+                      <motion.div
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
                       >
-                        {generating ? (
-                          <>
-                            <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                            Đang tạo...
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="h-3 w-3 mr-1" />
-                            Tự động tạo từ AI
-                          </>
-                        )}
-                      </Button>
+                        <Button
+                          type="button"
+                          variant="default"
+                          size="sm"
+                          onClick={handleGenerate}
+                          disabled={generating || createLoading}
+                          className="group/ai text-xs bg-gradient-to-br font-bold text-white hover:text-white from-orange-400 to-orange-600 border-0"
+                        >
+                          {generating ? (
+                            <>
+                              <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                              Đang tạo...
+                            </>
+                          ) : (
+                            <>
+                              <motion.div
+                                whileHover={{ scale: 1.2, rotate: 180 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                              >
+                                <PiStarFour className="h-3 w-3 mr-1" />
+                              </motion.div>
+                              Tự động tạo từ AI
+                            </>
+                          )}
+                        </Button>
+                      </motion.div>
                     )}
                   </div>
                   <div className="relative">
@@ -364,7 +378,7 @@ const CreateFlashcardModal: React.FC<CreateFlashcardModalProps> = ({
               </div>
             </form>
           </CardContent>
-          <CardFooter className="flex-col gap-2">
+            <CardFooter className="flex-col gap-2 flex-shrink-0">
             <Button
               type="submit"
               className="w-full"
@@ -384,6 +398,7 @@ const CreateFlashcardModal: React.FC<CreateFlashcardModalProps> = ({
             </Button>
           </CardFooter>
         </Card>
+        </BackgroundGradient>
       </DialogContent>
     </Dialog>
   );

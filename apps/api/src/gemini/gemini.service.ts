@@ -104,10 +104,10 @@ Yêu cầu:
       throw new Error('Gemini API key is not configured. Please set GEMINI_API_KEY in your .env file.');
     }
 
-    const prompt = `Bạn là một giáo viên tiếng Anh chuyên nghiệp. Hãy tạo một bộ sưu tập flashcard với chủ đề "${folderName}".
+    const prompt = `Bạn là một giáo viên tiếng Anh chuyên nghiệp. Hãy tạo một Flashbook (Flashbook là một bộ sưu tập Flashcard) với chủ đề "${folderName}".
 
 Yêu cầu:
-1. Tạo mô tả ngắn gọn cho bộ sưu tập (1-2 câu) (tiếng Việt). Tên folder giữ nguyên người dùng nhập vào
+1. Tạo mô tả ngắn gọn cho Flashbook (1-2 câu) (tiếng Việt). Tên Flashbook giữ nguyên người dùng nhập vào
 2. Tạo 10-15 từ vựng tiếng Anh liên quan đến chủ đề "${folderName}"
 3. Mỗi từ vựng cần có:
    - name: Từ tiếng Anh
@@ -121,7 +121,7 @@ Yêu cầu:
 Trả về JSON với định dạng:
 {
   "folderName": "${folderName}",
-  "folderDescription": "Mô tả bộ sưu tập",
+  "folderDescription": "Mô tả Flashbook",
   "flashcards": [
     {
       "name": "từ vựng 1",
@@ -184,8 +184,8 @@ Chỉ trả về JSON, không có text thừa. Đảm bảo JSON hợp lệ.`;
         flashcards: parsed.flashcards,
       };
     } catch (error: any) {
-      console.error('Error generating folder with flashcards from Gemini:', error);
-      throw new Error(`Failed to generate folder with flashcards: ${error.message}`);
+      console.error('Error generating Flashbook with flashcards from Gemini:', error);
+      throw new Error(`Failed to generate Flashbook with flashcards: ${error.message}`);
     }
   }
 }

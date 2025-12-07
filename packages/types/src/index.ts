@@ -1,3 +1,6 @@
+// Common
+export * from "./common/pagination.schema";
+
 // User
 export * from "./user/signin.request";
 export * from "./user/signup.request";

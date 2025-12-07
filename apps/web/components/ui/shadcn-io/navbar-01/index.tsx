@@ -99,41 +99,76 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
     }, [ref]);
 
     return (
-      <header
-        ref={combinedRef}
-        className={cn(
-          'sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 md:px-6 [&_*]:no-underline',
-          className
-        )}
-        {...props}
-      >
-        <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between gap-4">
-          {/* Left side */}
-          <div className="flex items-center gap-2">
-            {/* Mobile menu trigger */}
-            {isMobile && (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
-                    variant="ghost"
-                    size="icon"
-                  >
-                    <IoMenuOutline />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent align="start" className="w-fit">
-                <NavigationMenu className="w-full">
-                  <NavigationMenuList className="flex-col flex w-fitl items-start gap-1">
+      <div className="sticky top-0 z-50 w-full px-4 md:px-6 py-3">
+        <header
+          ref={combinedRef}
+          className={cn(
+            'w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 rounded-2xl shadow-sm dark:shadow-[0_2px_8px_0_rgb(255_255_255_/_0.15),0_1px_4px_-1px_rgb(255_255_255_/_0.1)] border border-border/50 px-4 md:px-6 [&_*]:no-underline',
+            className
+          )}
+          {...props}
+        >
+          <div className="flex h-14 items-center justify-between gap-4">
+            {/* Left side - Brand */}
+            <div className="flex items-center gap-2">
+              {/* Mobile menu trigger */}
+              {isMobile && (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
+                      variant="ghost"
+                      size="icon"
+                    >
+                      <IoMenuOutline />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start" className="w-fit">
+                    <NavigationMenu className="w-full">
+                      <NavigationMenuList className="flex-col flex w-fit items-start gap-1">
+                        {navigationLinks.map((link, index) => (
+                          <NavigationMenuItem key={index} className="w-full">
+                            <Link
+                              href={link.href}
+                                className={cn(
+                                  "flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
+                                  link.active 
+                                    ? "bg-orange-500 text-white hover:bg-orange-600" 
+                                    : "text-foreground/80"
+                                )}
+                            >
+                              {link.label}
+                            </Link>
+                          </NavigationMenuItem>
+                        ))}
+                      </NavigationMenuList>
+                    </NavigationMenu>
+                  </PopoverContent>
+                </Popover>
+              )}
+              {/* Brand/Logo */}
+              <Link 
+                href={logoHref || '/'}
+                className="flex items-center justify-center rounded-full bg-background text-sm font-bold cursor-pointer no-underline"
+              >
+                {logo || <span className="font-bold text-xl hover:text-orange-600 transition-colors text-orange-500">toeup.</span>}
+              </Link>
+            </div>
+
+            {/* Center - Navigation Links */}
+            {!isMobile && (
+              <div className="flex-1 flex items-center justify-center gap-1">
+                <NavigationMenu className="flex">
+                  <NavigationMenuList className="gap-1">
                     {navigationLinks.map((link, index) => (
-                      <NavigationMenuItem key={index} className="w-full">
+                      <NavigationMenuItem key={index}>
                         <Link
                           href={link.href}
                           className={cn(
-                            "flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
+                            "group inline-flex h-9 items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors cursor-pointer no-underline",
                             link.active 
-                              ? "bg-accent text-accent-foreground" 
-                              : "text-foreground/80"
+                              ? "bg-orange-500 text-white hover:bg-orange-600" 
+                              : "text-foreground/80 hover:bg-accent hover:text-foreground"
                           )}
                         >
                           {link.label}
@@ -142,117 +177,86 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                     ))}
                   </NavigationMenuList>
                 </NavigationMenu>
-                </PopoverContent>
-              </Popover>
+              </div>
             )}
-            {/* Main nav */}
-            <div className="flex items-center gap-6">
-              <Link 
-                href={logoHref || '/'}
-                className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
-              >
-                {logo || <span className="font-bold text-xl">toeup.</span>}
-              </Link>
-              {/* Navigation menu */}
-              {!isMobile && (
-                <NavigationMenu className="flex">
-                <NavigationMenuList className="gap-1">
-                  {navigationLinks.map((link, index) => (
-                    <NavigationMenuItem key={index}>
-                      <Link
-                        href={link.href}
-                        className={cn(
-                          "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer no-underline",
-                          link.active 
-                            ? "bg-accent text-accent-foreground" 
-                            : "text-foreground/80 hover:text-foreground"
-                        )}
+
+            {/* Right side - Utility Icons */}
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              {!loading && user ? (
+                <>
+                  <Link href="/dashboard">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="text-sm font-medium"
+                    >
+                      Học tập
+                    </Button>
+                  </Link>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-9 w-9 rounded-full hover:bg-accent"
                       >
-                        {link.label}
-                      </Link>
-                    </NavigationMenuItem>
-                  ))}
-                </NavigationMenuList>
-                </NavigationMenu>
-              )}
-            </div>
-          </div>
-          {/* Right side */}
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            {!loading && user ? (
-              <>
-                <Link href="/dashboard">
-                  <Button
-                    variant="default"
-                    size="sm"
-                    className="text-sm font-medium"
-                  >
-                    Học tập
-                  </Button>
-                </Link>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback className="text-xs">
-                          {user.name?.charAt(0).toUpperCase() || 'U'}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="text-sm font-medium hidden sm:inline-block">
-                        {user.name}
-                      </span>
-                      <ChevronDown className="h-4 w-4 hidden sm:inline-block opacity-50" />
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent align="end" className="w-56 p-1">
-                    <div className="flex flex-col gap-1">
-                      <Link
-                        href="/dashboard"
-                        className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer no-underline"
-                      >
-                        <User className="h-4 w-4" />
-                        <span>Dashboard</span>
-                      </Link>
-                      <button
-                        onClick={async () => {
-                          await signout();
-                          router.push('/');
-                        }}
-                        className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer text-left w-full"
-                      >
-                        <LogOut className="h-4 w-4" />
-                        <span>Đăng xuất</span>
-                      </button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </>
-            ) : (
-              onSignInClick ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                  onClick={onSignInClick}
-                >
-                  {signInText}
-                </Button>
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback className="text-xs">
+                            {user.name?.charAt(0).toUpperCase() || 'U'}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="end" className="w-56 p-1">
+                      <div className="flex flex-col gap-1">
+                        <Link
+                          href="/dashboard"
+                          className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer no-underline"
+                        >
+                          <User className="h-4 w-4" />
+                          <span>Dashboard</span>
+                        </Link>
+                        <button
+                          onClick={async () => {
+                            await signout();
+                            router.push('/');
+                          }}
+                          className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer text-left w-full"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          <span>Đăng xuất</span>
+                        </button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </>
               ) : (
-                <Link href={signInHref}>
+                onSignInClick ? (
                   <Button
                     variant="ghost"
                     size="sm"
                     className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                    onClick={onSignInClick}
                   >
                     {signInText}
                   </Button>
-                </Link>
-              )
-            )}
+                ) : (
+                  <Link href={signInHref}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                    >
+                      {signInText}
+                    </Button>
+                  </Link>
+                )
+              )}
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
     );
   }
 );

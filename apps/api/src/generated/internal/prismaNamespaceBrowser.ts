@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Folder: 'Folder',
-  Flashcard: 'Flashcard'
+  Flashcard: 'Flashcard',
+  StudyCount: 'StudyCount'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -108,13 +109,30 @@ export const FlashcardScalarFieldEnum = {
   review_count: 'review_count',
   audio_url: 'audio_url',
   usage: 'usage',
-  is_remembered: 'is_remembered',
+  status: 'status',
+  interval: 'interval',
+  nextReview: 'nextReview',
+  easeFactor: 'easeFactor',
+  lapseCount: 'lapseCount',
   tags: 'tags',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type FlashcardScalarFieldEnum = (typeof FlashcardScalarFieldEnum)[keyof typeof FlashcardScalarFieldEnum]
+
+
+export const StudyCountScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  newCount: 'newCount',
+  reviewCount: 'reviewCount',
+  day: 'day',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudyCountScalarFieldEnum = (typeof StudyCountScalarFieldEnum)[keyof typeof StudyCountScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { toast } from 'sonner';
+import { z } from 'zod';
 import api from '@/lib/axios';
 import { 
   FolderResponse, 
@@ -7,20 +8,32 @@ import {
   FolderWithFlashcards,
   folderRequestSchema,
   folderResponseSchema,
-  folderWithFlashcardsSchema
+  folderWithFlashcardsSchema,
+  Pagination,
 } from '@repo/types';
+
+interface FolderFilters {
+  search?: string;
+  sortBy?: 'name' | 'createdAt';
+  sortOrder?: 'asc' | 'desc';
+}
 
 interface FolderState {
   folders: FolderResponse[];
   currentFolder: FolderWithFlashcards | null;
+  pagination: Pagination | null;
+  filters: FolderFilters;
   loading: boolean;
+  loadingMore: boolean;
   createLoading: boolean;
   updateLoading: boolean;
   deleteLoading: boolean;
   generateLoading: boolean;
   
   // Actions
-  fetchFolders: () => Promise<void>;
+  fetchFolders: (resetFilters?: boolean) => Promise<void>;
+  loadMoreFolders: () => Promise<void>;
+  setFilters: (filters: FolderFilters) => void;
   getFolder: (id: string) => Promise<void>;
   createFolder: (folderRequest: FolderRequest) => Promise<void>;
   updateFolder: (id: string, folderRequest: FolderRequest) => Promise<void>;
@@ -34,21 +47,44 @@ interface FolderState {
 const useFolderStore = create<FolderState>((set, get) => ({
   folders: [],
   currentFolder: null,
+  pagination: null,
+  filters: {},
   loading: false,
+  loadingMore: false,
   createLoading: false,
   updateLoading: false,
   deleteLoading: false,
   generateLoading: false,
 
+  // Set filters
+  setFilters: (filters: FolderFilters) => {
+    set({ filters });
+  },
+
   // Fetch all folders
-  fetchFolders: async () => {
+  fetchFolders: async (resetFilters = false) => {
+    const { filters } = get();
+    const currentFilters = resetFilters ? {} : filters;
+    
+    if (resetFilters) {
+      set({ filters: {} });
+    }
+    
     set({ loading: true });
     try {
-      const response = await api.get('/folders');
-      const folders = response.data.map((folder: any) => 
-        folderResponseSchema.parse(folder)
-      );
-      set({ folders });
+      const params: Record<string, any> = {
+        page: 1,
+        limit: 12,
+        ...(currentFilters.search && { search: currentFilters.search }),
+        ...(currentFilters.sortBy && { sort_by: currentFilters.sortBy }),
+        ...(currentFilters.sortOrder && { sort_order: currentFilters.sortOrder }),
+      };
+      
+      const response = await api.get('/folders', { params });
+      const folders = z.array(folderResponseSchema).parse(response.data.data);
+      const pagination = response.data.pagination as Pagination;
+      
+      set({ folders, pagination });
     } catch (error: any) {
       if (error.response?.data?.message) {
         toast.error(error.response.data.message);
@@ -56,9 +92,45 @@ const useFolderStore = create<FolderState>((set, get) => ({
         toast.error('Không thể tải danh sách folder');
         console.error(error);
       }
-      set({ folders: [] });
+      set({ folders: [], pagination: null });
     } finally {
       set({ loading: false });
+    }
+  },
+
+  // Load more folders (infinite scroll)
+  loadMoreFolders: async () => {
+    const { pagination, folders, filters, loadingMore } = get();
+    
+    if (!pagination || !pagination.hasMore || loadingMore) return;
+    
+    set({ loadingMore: true });
+    try {
+      const params: Record<string, any> = {
+        page: pagination.page + 1,
+        limit: pagination.limit,
+        ...(filters.search && { search: filters.search }),
+        ...(filters.sortBy && { sort_by: filters.sortBy }),
+        ...(filters.sortOrder && { sort_order: filters.sortOrder }),
+      };
+      
+      const response = await api.get('/folders', { params });
+      const newFolders = z.array(folderResponseSchema).parse(response.data.data);
+      const newPagination = response.data.pagination as Pagination;
+      
+      set({ 
+        folders: [...folders, ...newFolders], 
+        pagination: newPagination 
+      });
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Không thể tải thêm folder');
+        console.error(error);
+      }
+    } finally {
+      set({ loadingMore: false });
     }
   },
 
