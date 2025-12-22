@@ -12,3 +12,6 @@ export * from "./folder/folder.schema";
 // Flashcard
 export * from "./flashcard/usage.schema";
 export * from "./flashcard/flashcard.schema";
+
+// Practice
+export * from "./practice/practice.schema";

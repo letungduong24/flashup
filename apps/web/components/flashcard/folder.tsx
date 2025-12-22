@@ -70,12 +70,16 @@ const Folder: React.FC<FolderProps> = ({ folder, isSummaryMode = false, mode, is
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.35, duration: 0.4 }}
             >
-              <Badge variant="default">
-                {folder.newCount} từ mới
-              </Badge>
-              <Badge variant="secondary">
-                {folder.reviewCount} cần review
-              </Badge>
+              {!isExplore && (
+                <>
+                  <Badge variant="default">
+                    {folder.newCount} từ mới
+                  </Badge>
+                  <Badge variant="secondary">
+                    {folder.reviewCount} cần review
+                  </Badge>
+                </>
+              )}
               {folder.saves !== undefined && folder.saves > 0 && (
                 <Badge variant="outline">
                   {folder.saves} lượt lưu
@@ -108,12 +112,16 @@ const Folder: React.FC<FolderProps> = ({ folder, isSummaryMode = false, mode, is
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.35, duration: 0.4 }}
             >
-              <Badge variant="default">
-                {folder.newCount} từ mới
-              </Badge>
-              <Badge variant="secondary">
-                {folder.reviewCount} cần review
-              </Badge>
+              {!isExplore && (
+                <>
+                  <Badge variant="default">
+                    {folder.newCount} từ mới
+                  </Badge>
+                  <Badge variant="secondary">
+                    {folder.reviewCount} cần review
+                  </Badge>
+                </>
+              )}
               {folder.saves !== undefined && folder.saves > 0 && (
                 <Badge variant="outline">
                   {folder.saves} lượt lưu

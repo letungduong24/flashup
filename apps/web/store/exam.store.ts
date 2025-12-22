@@ -20,7 +20,7 @@ interface ExamState {
   // Actions
   fetchExams: (isActive?: boolean) => Promise<void>;
   getExam: (id: string) => Promise<void>;
-  createExam: (examRequest: ExamRequest) => Promise<void>;
+  createExam: (examRequest: ExamRequest) => Promise<ExamResponse>;
   updateExam: (id: string, examRequest: ExamRequest) => Promise<void>;
   deleteExam: (id: string) => Promise<void>;
   setCurrentExam: (exam: ExamResponse | null) => void;

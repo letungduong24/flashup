@@ -141,19 +141,21 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
               </div>
             )}
             
-            <div className="flex items-center justify-center gap-4">
-              <div className="text-sm text-muted-foreground">
-                Đã học {flashcard.review_count} lần
-              </div>
-              <div className="text-xs px-2 py-1 flex justify-center items-center bg-blue-600 text-white font-bold rounded-2xl">
-                {flashcard.status === "new" ? "Mới" : "Ôn tập"}
-              </div>
-              {flashcard.lapseCount > 0 && (
-                <div className="text-xs px-2 py-1 flex justify-center items-center bg-red-600 text-white font-bold rounded-2xl">
-                  Quên {flashcard.lapseCount} lần
+            {!previewMode && (
+              <div className="flex items-center justify-center gap-4">
+                <div className="text-sm text-muted-foreground">
+                  Đã học {flashcard.review_count} lần
                 </div>
-              )}
-            </div>
+                <div className="text-xs px-2 py-1 flex justify-center items-center bg-blue-600 text-white font-bold rounded-2xl">
+                  {flashcard.status === "new" ? "Mới" : "Ôn tập"}
+                </div>
+                {flashcard.lapseCount > 0 && (
+                  <div className="text-xs px-2 py-1 flex justify-center items-center bg-red-600 text-white font-bold rounded-2xl">
+                    Quên {flashcard.lapseCount} lần
+                  </div>
+                )}
+              </div>
+            )}
             
             {flashcard.tags && flashcard.tags.length > 0 && (
               <div className=" flex flex-wrap gap-2 justify-center">

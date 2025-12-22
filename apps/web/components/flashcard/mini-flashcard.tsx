@@ -65,7 +65,7 @@ const MiniFlashcard: React.FC<MiniFlashcardProps> = ({ flashcard, onDelete, onEd
               animate={{ opacity: 1 }}
               transition={{ delay: 0.25, duration: 0.4 }}
             >
-              {flashcard.status === "review" && flashcard.nextReview && (
+              {!readOnly && flashcard.status === "review" && flashcard.nextReview && (
                 <motion.div 
                   className="italic text-sm text-muted-foreground"
                   initial={{ opacity: 0, y: 5 }}
@@ -81,32 +81,34 @@ const MiniFlashcard: React.FC<MiniFlashcardProps> = ({ flashcard, onDelete, onEd
                   })}
                 </motion.div>
               )}
-              <motion.div 
-                className="flex justify-end items-center gap-2"
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.35, duration: 0.4 }}
-              >
-                <Badge>Đã học {flashcard.review_count} lần</Badge>
-                <div className="text-xs px-2 py-1 flex justify-center items-center bg-blue-600 text-white font-bold rounded-2xl">
-                  {flashcard.status === "new" ? "Mới" : "Ôn tập"}
-                </div>
-                {flashcard.lapseCount > 0 && (
-                  <motion.div 
-                    className="text-xs px-2 py-1 flex justify-center items-center bg-red-600 text-white font-bold rounded-2xl"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ 
-                      type: "spring", 
-                      stiffness: 300, 
-                      damping: 20, 
-                      delay: 0.4 
-                    }}
-                  >
-                    Quên {flashcard.lapseCount} lần
-                  </motion.div>
-            )}
-              </motion.div>
+              {!readOnly && (
+                <motion.div 
+                  className="flex justify-end items-center gap-2"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.35, duration: 0.4 }}
+                >
+                  <Badge>Đã học {flashcard.review_count} lần</Badge>
+                  <div className="text-xs px-2 py-1 flex justify-center items-center bg-blue-600 text-white font-bold rounded-2xl">
+                    {flashcard.status === "new" ? "Mới" : "Ôn tập"}
+                  </div>
+                  {flashcard.lapseCount > 0 && (
+                    <motion.div 
+                      className="text-xs px-2 py-1 flex justify-center items-center bg-red-600 text-white font-bold rounded-2xl"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 300, 
+                        damping: 20, 
+                        delay: 0.4 
+                      }}
+                    >
+                      Quên {flashcard.lapseCount} lần
+                    </motion.div>
+                  )}
+                </motion.div>
+              )}
             </motion.div>
         </CardContent>
       </Card>

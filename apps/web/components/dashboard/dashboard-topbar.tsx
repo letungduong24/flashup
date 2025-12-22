@@ -20,13 +20,12 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { IoMenuOutline } from "react-icons/io5";
 import useAuthStore from '@/store/auth.store';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { LogOut, User, ChevronDown, Home, BookOpen, FileText, BarChart3, Settings, Bell } from 'lucide-react';
+import { LogOut, User, ChevronDown, Home, BookOpen, FileText, BarChart3 } from 'lucide-react';
 
 const menuItems = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/dashboard/flashcard', label: 'Flashbook' },
   { href: '/dashboard/explore', label: 'Khám phá' },
-  { href: '/dashboard/settings', label: 'Cài đặt' },
 ];
 
 export const DashboardTopbar = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
@@ -153,25 +152,6 @@ export const DashboardTopbar = React.forwardRef<HTMLElement, React.HTMLAttribute
             <div className="flex items-center gap-2">
               {/* Theme Toggle */}
               <ThemeToggle />
-              
-              {/* Settings */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-9 rounded-lg px-3 hover:bg-accent"
-              >
-                <Settings className="h-4 w-4 mr-2" />
-              </Button>
-
-              {/* Notifications */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 rounded-full relative hover:bg-accent"
-              >
-                <Bell className="h-4 w-4" />
-                <span className="absolute top-1 right-1 h-2 w-2 bg-yellow-500 rounded-full" />
-              </Button>
 
               {/* User Profile */}
               <Popover>

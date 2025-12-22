@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import CreateFolderModal from '@/components/flashcard/create-folder-modal';
 import AIAssistantModal from '@/components/flashcard/ai-assistant-modal';
+import AttendanceCalendar from '@/components/attendance/attendance-calendar';
 import { Button } from '@/components/ui/button';
 import { 
   Calendar,
@@ -125,77 +126,78 @@ export default function DashboardPage() {
         <p className="text-muted-foreground mb-6">Theo dõi tiến độ học tập của bạn</p>
       </motion.div>
 
-      {/* Main Content - 3 Columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column */}
-        <div className="lg:col-span-1 space-y-6">
-          {/* Key Metrics - Grouped */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Card className="w-full">
-              <CardHeader>
-                <CardTitle>Thống kê</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex gap-6 justify-between">
-                  <div className="flex flex-col items-center gap-1">
-                    {loadingSummary ? (
-                      <div className="h-10 w-20 bg-muted animate-pulse rounded" />
-                    ) : (
-                      <p className="text-5xl font-bold">{totalFlashbooks}</p>
-                    )}
-                    <p className="text-sm text-muted-foreground">Flashbook</p>
-                  </div>
-
-                  <div className="flex flex-col items-center gap-1">
-                    {loadingSummary ? (
-                      <div className="h-10 w-20 bg-muted animate-pulse rounded" />
-                    ) : (
-                      <p className="text-5xl font-bold">{totalFlashcards}</p>
-                    )}
-                    <p className="text-sm text-muted-foreground">Flashcard</p>
-                  </div>
-
-                  <div className="flex flex-col items-center gap-1">
-                    {loadingSummary ? (
-                      <div className="h-10 w-20 bg-muted animate-pulse rounded" />
-                    ) : (
-                      <p className="text-5xl font-bold">{totalNewWords}</p>
-                    )}
-                    <p className="text-sm text-muted-foreground">Từ mới</p>
-                  </div>
-
-                  <div className="flex flex-col items-center gap-1">
-                    {loadingSummary ? (
-                      <div className="h-10 w-20 bg-muted animate-pulse rounded" />
-                    ) : (
-                      <p className="text-5xl font-bold">{totalReviewWords}</p>
-                    )}
-                    <p className="text-sm text-muted-foreground">Cần review</p>
-                  </div>
+      {/* Main Content - Grid with equal cells */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 xl:grid-rows-3 xl:[grid-auto-rows:1fr]">
+        {/* Key Metrics - Row 1, Col 1 */}
+        <motion.div
+          className="xl:col-start-1 xl:row-start-1 xl:row-span-1"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="h-full flex flex-col">
+            <CardHeader>
+              <CardTitle>Thống kê</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex items-center">
+              <div className="grid grid-cols-2 xl:grid-cols-4 gap-6 w-full">
+                <div className="flex flex-col items-center gap-1">
+                  {loadingSummary ? (
+                    <div className="h-10 w-20 bg-muted animate-pulse rounded" />
+                  ) : (
+                    <p className="text-5xl font-bold">{totalFlashbooks}</p>
+                  )}
+                  <p className="text-sm text-muted-foreground">Flashbook</p>
                 </div>
-              </CardContent>
-            </Card>
-          </motion.div>
 
-          {/* Học từ mới */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
+                <div className="flex flex-col items-center gap-1">
+                  {loadingSummary ? (
+                    <div className="h-10 w-20 bg-muted animate-pulse rounded" />
+                  ) : (
+                    <p className="text-5xl font-bold">{totalFlashcards}</p>
+                  )}
+                  <p className="text-sm text-muted-foreground">Flashcard</p>
+                </div>
+
+                <div className="flex flex-col items-center gap-1">
+                  {loadingSummary ? (
+                    <div className="h-10 w-20 bg-muted animate-pulse rounded" />
+                  ) : (
+                    <p className="text-5xl font-bold">{totalNewWords}</p>
+                  )}
+                  <p className="text-sm text-muted-foreground">Từ mới</p>
+                </div>
+
+                <div className="flex flex-col items-center gap-1">
+                  {loadingSummary ? (
+                    <div className="h-10 w-20 bg-muted animate-pulse rounded" />
+                  ) : (
+                    <p className="text-5xl font-bold">{totalReviewWords}</p>
+                  )}
+                  <p className="text-sm text-muted-foreground">Cần review</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Học từ mới - Row 2-3, Col 1 */}
+        <motion.div
+          className="xl:col-start-1 xl:row-start-2 xl:row-span-2"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="h-full">
             {loadingNearestReview ? (
-              <Card>
-                <CardContent className="flex items-center justify-center py-8">
+              <Card className="h-full flex flex-col">
+                <CardContent className="flex-1 flex items-center justify-center">
                   <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                 </CardContent>
               </Card>
             ) : hasNoFlashcards ? (
-              <Card>
-                <CardContent>
+              <Card className="h-full flex flex-col">
+                <CardContent className="flex-1 flex items-center justify-center">
                   <Empty>
                     <EmptyHeader>
                       <EmptyMedia variant="icon">
@@ -229,10 +231,12 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             ) : nearestReviewFolder ? (
-              <Folder folder={nearestReviewFolder} isSummaryMode mode={folderMode || undefined} />
+              <div className="h-full">
+                <Folder folder={nearestReviewFolder} isSummaryMode mode={folderMode || undefined} />
+              </div>
             ) : (
-              <Card>
-                <CardContent className="flex flex-col items-center justify-center py-8 gap-4">
+              <Card className="h-full flex flex-col">
+                <CardContent className="flex-1 flex flex-col items-center justify-center gap-4">
                   <PartyPopper className="h-12 w-12 text-orange-500" />
                   <div className="text-center space-y-2">
                     <p className="text-lg font-semibold">Không có từ mới để học</p>
@@ -240,71 +244,77 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             )}
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
 
-        {/* Middle Column */}
-        <div className="lg:col-span-1 space-y-6">
-          {/* Progress Chart */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>Tiến độ học tập</CardTitle>
-                <CardDescription>{totalWeeklyCount} từ đã học tuần này</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {loadingDailyStats ? (
-                  <div className="flex items-center justify-center h-64">
-                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                  </div>
-                ) : chartData.length > 0 ? (
-                  <ChartContainer config={chartConfig} className="h-64 w-full">
-                    <BarChart
-                      data={chartData}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis
-                        dataKey="day"
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                        className="text-xs"
-                      />
-                      <YAxis
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                        className="text-xs"
-                      />
-                      <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent indicator="dot" />}
-                      />
-                      <Bar
-                        dataKey="count"
-                        fill="#f97316"
-                        radius={[4, 4, 0, 0]}
-                      />
-                    </BarChart>
-                  </ChartContainer>
-                ) : (
-                  <div className="flex items-center justify-center h-64 text-sm text-muted-foreground">
-                    Chưa có dữ liệu học tập
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+        {/* Progress Chart - Row 1-3, Col 2 */}
+        <motion.div
+          className="xl:col-start-2 xl:row-start-1 xl:row-span-3"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card className="h-full flex flex-col">
+            <CardHeader>
+              <CardTitle>Tiến độ học tập</CardTitle>
+              <CardDescription>{totalWeeklyCount} từ đã học tuần này</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-1 flex items-center">
+              {loadingDailyStats ? (
+                <div className="flex items-center justify-center w-full">
+                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                </div>
+              ) : chartData.length > 0 ? (
+                <ChartContainer config={chartConfig} className="h-full w-full">
+                  <BarChart
+                    data={chartData}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis
+                      dataKey="day"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                      className="text-xs"
+                    />
+                    <YAxis
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                      className="text-xs"
+                    />
+                    <ChartTooltip
+                      cursor={false}
+                      content={<ChartTooltipContent indicator="dot" />}
+                    />
+                    <Bar
+                      dataKey="count"
+                      fill="#f97316"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </BarChart>
+                </ChartContainer>
+              ) : (
+                <div className="flex items-center justify-center w-full text-sm text-muted-foreground">
+                  Chưa có dữ liệu học tập
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        {/* Right Column */}
-        <div className="lg:col-span-1 space-y-6">
-        </div>
+        {/* Attendance Calendar - Row 1-3, Col 3 */}
+        <motion.div
+          className="xl:col-start-3 xl:row-start-1 xl:row-span-3"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <div className="h-full">
+            <AttendanceCalendar />
+          </div>
+        </motion.div>
       </div>
 
       <CreateFolderModal

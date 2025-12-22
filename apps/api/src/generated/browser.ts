@@ -37,3 +37,8 @@ export type Flashcard = Prisma.FlashcardModel
  * 
  */
 export type StudyCount = Prisma.StudyCountModel
+/**
+ * Model Attendance
+ * 
+ */
+export type Attendance = Prisma.AttendanceModel

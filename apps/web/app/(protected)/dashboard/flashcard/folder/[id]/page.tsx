@@ -8,7 +8,7 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import useFolderStore from '@/store/folder.store';
-import { ArrowLeft, Search, Loader2, X } from 'lucide-react';
+import { ArrowLeft, Search, Loader2, X, BookOpen } from 'lucide-react';
 import { BsCardText } from 'react-icons/bs';
 import MiniFlashcard from '@/components/flashcard/mini-flashcard';
 import { FaPlus } from 'react-icons/fa';
@@ -31,6 +31,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import PracticeModeDialog from '@/components/flashcard/practice-mode-dialog';
 
 export default function FolderDetailPage() {
   const params = useParams();
@@ -64,6 +65,7 @@ export default function FolderDetailPage() {
   const [isUnshareDialogOpen, setIsUnshareDialogOpen] = useState(false);
   const [pendingPublicState, setPendingPublicState] = useState<boolean | null>(null);
   const [searchInput, setSearchInput] = useState('');
+  const [isPracticeModeDialogOpen, setIsPracticeModeDialogOpen] = useState(false);
   
   // Debounced search value
   const debouncedSearch = useDebounce(searchInput, 500);
@@ -240,41 +242,78 @@ export default function FolderDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Sidebar - 1/4 */}
         <div className="lg:col-span-1 space-y-4">
-          {/* Study Button */}
-          <motion.div 
-            className="group cursor-pointer bg-gradient-to-br w-full from-orange-300 to-orange-500 p-4 rounded-2xl flex flex-col justify-center items-start"
-            onClick={() => router.push(`/dashboard/flashcard/folder/${folderId}/study`)}
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{
-              duration: 0.5,
-              ease: [0.4, 0, 0.2, 1],
-              delay: 0.1,
-            }}
-            whileHover={{ 
-              scale: 1.05,
-              y: -4,
-              transition: { duration: 0.3 }
-            }}
-            whileTap={{ scale: 0.98 }}
-          >
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
             <motion.div 
-              className="flex justify-start"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2, duration: 0.4 }}
+              className="group cursor-pointer bg-gradient-to-br w-full from-orange-300 to-orange-500 p-4 rounded-2xl flex flex-col justify-center items-start"
+              onClick={() => router.push(`/dashboard/flashcard/folder/${folderId}/study`)}
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                duration: 0.5,
+                ease: [0.4, 0, 0.2, 1],
+                delay: 0.1,
+              }}
+              whileHover={{ 
+                scale: 1.05,
+                y: -4,
+                transition: { duration: 0.3 }
+              }}
+              whileTap={{ scale: 0.98 }}
             >
-              <GiBlackBook className='group-hover:scale-150 group-hover:rotate-180 transition-all duration-300 text-xl font-bold text-white'/>
+              <motion.div 
+                className="flex justify-start"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.4 }}
+              >
+                <GiBlackBook className='group-hover:scale-150 group-hover:rotate-180 transition-all duration-300 text-xl font-bold text-white'/>
+              </motion.div>
+              <motion.div 
+                className="flex flex-col items-end w-full"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.25, duration: 0.4 }}
+              >
+                <h1 className='font-bold text-white text-xl'>Học Flashbook</h1>
+              </motion.div>
             </motion.div>
+
+            {/* Practice Button */}
             <motion.div 
-              className="flex flex-col items-end w-full"
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.25, duration: 0.4 }}
+              className="group cursor-pointer bg-gradient-to-br w-full from-blue-300 to-blue-500 p-4 rounded-2xl flex flex-col justify-center items-start"
+              onClick={() => setIsPracticeModeDialogOpen(true)}
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                duration: 0.5,
+                ease: [0.4, 0, 0.2, 1],
+                delay: 0.12,
+              }}
+              whileHover={{ 
+                scale: 1.05,
+                y: -4,
+                transition: { duration: 0.3 }
+              }}
+              whileTap={{ scale: 0.98 }}
             >
-              <h1 className='font-bold text-white text-xl'>Học Flashbook</h1>
+              <motion.div 
+                className="flex justify-start"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.22, duration: 0.4 }}
+              >
+                <BookOpen className='group-hover:scale-150 group-hover:rotate-12 transition-all duration-300 text-xl font-bold text-white'/>
+              </motion.div>
+              <motion.div 
+                className="flex flex-col items-end w-full"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.27, duration: 0.4 }}
+              >
+                <h1 className='font-bold text-white text-xl'>Luyện tập</h1>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
           <motion.div 
             className="sticky top-20 p-4 h-fit border border-zinc-300 dark:border-zinc-700 rounded-2xl space-y-4"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -285,6 +324,7 @@ export default function FolderDetailPage() {
               delay: 0.15,
             }}
           >
+          {/* Study Button */}
             {/* Folder info & actions */}
             <div className="flex flex-col gap-4">
               <p className="text-sm text-muted-foreground">
@@ -609,6 +649,19 @@ export default function FolderDetailPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Practice Mode Dialog */}
+      <PracticeModeDialog
+        open={isPracticeModeDialogOpen}
+        onOpenChange={setIsPracticeModeDialogOpen}
+        onSelectMode={(mode) => {
+          if (mode === 'fill-in-the-blank') {
+            router.push(`/dashboard/flashcard/folder/${folderId}/practice/fill-in-the-blank`);
+          } else if (mode === 'multiple-choice') {
+            router.push(`/dashboard/flashcard/folder/${folderId}/practice/multiple-choice`);
+          }
+        }}
+      />
     </div>
   );
 }

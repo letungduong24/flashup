@@ -54,7 +54,8 @@ export const ModelName = {
   User: 'User',
   Folder: 'Folder',
   Flashcard: 'Flashcard',
-  StudyCount: 'StudyCount'
+  StudyCount: 'StudyCount',
+  Attendance: 'Attendance'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -135,6 +136,17 @@ export const StudyCountScalarFieldEnum = {
 } as const
 
 export type StudyCountScalarFieldEnum = (typeof StudyCountScalarFieldEnum)[keyof typeof StudyCountScalarFieldEnum]
+
+
+export const AttendanceScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  date: 'date',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
 
 
 export const SortOrder = {

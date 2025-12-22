@@ -10,6 +10,9 @@ import { AuthModule } from './auth/auth.module';
 import { FoldersModule } from './folders/folders.module';
 import { FlashcardsModule } from './flashcards/flashcards.module';
 import { StudyModule } from './study/study.module';
+import { PracticeModule } from './practice/practice.module';
+import { RedisModule } from './redis/redis.module';
+import { AttendanceModule } from './attendance/attendance.module';
 
 @Module({
   imports: [
@@ -19,7 +22,10 @@ import { StudyModule } from './study/study.module';
     AuthModule,
     FoldersModule,
     FlashcardsModule,
-    StudyModule
+    StudyModule,
+    PracticeModule,
+    RedisModule,
+    AttendanceModule,
   ],
   controllers: [AppController, ],
   providers: [

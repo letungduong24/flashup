@@ -6,6 +6,7 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { Skeleton } from '@/components/ui/skeleton';
 import useFolderStore from '@/store/folder.store';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { BsFolder } from "react-icons/bs";
 import { PiStarFour } from "react-icons/pi";
 import { FaPlus } from "react-icons/fa";
@@ -19,6 +20,7 @@ import { MdElectricBolt } from "react-icons/md";
 import { motion } from 'framer-motion';
 
 export default function FlashcardPage() {
+  const router = useRouter();
   const { 
     folders, 
     pagination,
@@ -127,6 +129,7 @@ export default function FlashcardPage() {
               {/* Explore */}
               <motion.div 
                 className="group cursor-pointer border border-zinc-300 p-4 rounded-2xl flex flex-col justify-center items-start"
+                onClick={() => router.push('/dashboard/explore')}
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{
