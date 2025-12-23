@@ -25,7 +25,9 @@ WORKDIR /app
 RUN pnpm --filter @repo/types build
 
 # Generate Prisma Client
+# Note: prisma generate doesn't need a real DATABASE_URL, just a dummy one
 WORKDIR /app/apps/api
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN pnpm prisma generate
 
 # Build the application
