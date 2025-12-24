@@ -130,12 +130,12 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                           <NavigationMenuItem key={index} className="w-full">
                             <Link
                               href={link.href}
-                                className={cn(
-                                  "flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
-                                  link.active 
-                                    ? "bg-orange-500 text-white hover:bg-orange-600" 
-                                    : "text-foreground/80"
-                                )}
+                              className={cn(
+                                "flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
+                                link.active
+                                  ? "bg-orange-500 text-white hover:bg-orange-600"
+                                  : "text-foreground/80"
+                              )}
                             >
                               {link.label}
                             </Link>
@@ -147,7 +147,7 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                 </Popover>
               )}
               {/* Brand/Logo */}
-              <Link 
+              <Link
                 href={logoHref || '/'}
                 className="flex items-center justify-center rounded-full text-sm font-bold cursor-pointer no-underline"
               >
@@ -166,8 +166,8 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                           href={link.href}
                           className={cn(
                             "group inline-flex h-9 items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors cursor-pointer no-underline",
-                            link.active 
-                              ? "bg-orange-500 text-white hover:bg-orange-600" 
+                            link.active
+                              ? "bg-orange-500 text-white hover:bg-orange-600"
                               : "text-foreground/80 hover:bg-accent hover:text-foreground"
                           )}
                         >
@@ -211,11 +211,11 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                     <PopoverContent align="end" className="w-56 p-1">
                       <div className="flex flex-col gap-1">
                         <Link
-                          href="/dashboard"
+                          href="/dashboard/profile"
                           className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer no-underline"
                         >
                           <User className="h-4 w-4" />
-                          <span>Dashboard</span>
+                          <span>Hồ sơ</span>
                         </Link>
                         <button
                           onClick={async () => {

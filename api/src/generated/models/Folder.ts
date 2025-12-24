@@ -28,10 +28,12 @@ export type AggregateFolder = {
 
 export type FolderAvgAggregateOutputType = {
   saves: number | null
+  version: number | null
 }
 
 export type FolderSumAggregateOutputType = {
   saves: number | null
+  version: number | null
 }
 
 export type FolderMinAggregateOutputType = {
@@ -41,6 +43,7 @@ export type FolderMinAggregateOutputType = {
   user_id: string | null
   isPublic: boolean | null
   saves: number | null
+  version: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,6 +55,7 @@ export type FolderMaxAggregateOutputType = {
   user_id: string | null
   isPublic: boolean | null
   saves: number | null
+  version: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -63,6 +67,7 @@ export type FolderCountAggregateOutputType = {
   user_id: number
   isPublic: number
   saves: number
+  version: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -71,10 +76,12 @@ export type FolderCountAggregateOutputType = {
 
 export type FolderAvgAggregateInputType = {
   saves?: true
+  version?: true
 }
 
 export type FolderSumAggregateInputType = {
   saves?: true
+  version?: true
 }
 
 export type FolderMinAggregateInputType = {
@@ -84,6 +91,7 @@ export type FolderMinAggregateInputType = {
   user_id?: true
   isPublic?: true
   saves?: true
+  version?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -95,6 +103,7 @@ export type FolderMaxAggregateInputType = {
   user_id?: true
   isPublic?: true
   saves?: true
+  version?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +115,7 @@ export type FolderCountAggregateInputType = {
   user_id?: true
   isPublic?: true
   saves?: true
+  version?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -204,6 +214,7 @@ export type FolderGroupByOutputType = {
   user_id: string
   isPublic: boolean
   saves: number
+  version: number
   createdAt: Date
   updatedAt: Date
   _count: FolderCountAggregateOutputType | null
@@ -238,10 +249,12 @@ export type FolderWhereInput = {
   user_id?: Prisma.StringFilter<"Folder"> | string
   isPublic?: Prisma.BoolFilter<"Folder"> | boolean
   saves?: Prisma.IntFilter<"Folder"> | number
+  version?: Prisma.IntFilter<"Folder"> | number
   createdAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   flashcards?: Prisma.FlashcardListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  practiceSessions?: Prisma.PracticeSessionListRelationFilter
 }
 
 export type FolderOrderByWithRelationInput = {
@@ -251,10 +264,12 @@ export type FolderOrderByWithRelationInput = {
   user_id?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   saves?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   flashcards?: Prisma.FlashcardOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
+  practiceSessions?: Prisma.PracticeSessionOrderByRelationAggregateInput
 }
 
 export type FolderWhereUniqueInput = Prisma.AtLeast<{
@@ -267,10 +282,12 @@ export type FolderWhereUniqueInput = Prisma.AtLeast<{
   user_id?: Prisma.StringFilter<"Folder"> | string
   isPublic?: Prisma.BoolFilter<"Folder"> | boolean
   saves?: Prisma.IntFilter<"Folder"> | number
+  version?: Prisma.IntFilter<"Folder"> | number
   createdAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   flashcards?: Prisma.FlashcardListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  practiceSessions?: Prisma.PracticeSessionListRelationFilter
 }, "id">
 
 export type FolderOrderByWithAggregationInput = {
@@ -280,6 +297,7 @@ export type FolderOrderByWithAggregationInput = {
   user_id?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   saves?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.FolderCountOrderByAggregateInput
@@ -299,6 +317,7 @@ export type FolderScalarWhereWithAggregatesInput = {
   user_id?: Prisma.StringWithAggregatesFilter<"Folder"> | string
   isPublic?: Prisma.BoolWithAggregatesFilter<"Folder"> | boolean
   saves?: Prisma.IntWithAggregatesFilter<"Folder"> | number
+  version?: Prisma.IntWithAggregatesFilter<"Folder"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Folder"> | Date | string
 }
@@ -309,10 +328,12 @@ export type FolderCreateInput = {
   description?: string | null
   isPublic?: boolean
   saves?: number
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   flashcards?: Prisma.FlashcardCreateNestedManyWithoutFolderInput
   user: Prisma.UserCreateNestedOneWithoutFoldersInput
+  practiceSessions?: Prisma.PracticeSessionCreateNestedManyWithoutFolderInput
 }
 
 export type FolderUncheckedCreateInput = {
@@ -322,9 +343,11 @@ export type FolderUncheckedCreateInput = {
   user_id: string
   isPublic?: boolean
   saves?: number
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutFolderInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type FolderUpdateInput = {
@@ -333,10 +356,12 @@ export type FolderUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   flashcards?: Prisma.FlashcardUpdateManyWithoutFolderNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutFoldersNestedInput
+  practiceSessions?: Prisma.PracticeSessionUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateInput = {
@@ -346,9 +371,11 @@ export type FolderUncheckedUpdateInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutFolderNestedInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderCreateManyInput = {
@@ -358,6 +385,7 @@ export type FolderCreateManyInput = {
   user_id: string
   isPublic?: boolean
   saves?: number
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -368,6 +396,7 @@ export type FolderUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -379,6 +408,7 @@ export type FolderUncheckedUpdateManyInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -400,12 +430,14 @@ export type FolderCountOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   saves?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type FolderAvgOrderByAggregateInput = {
   saves?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type FolderMaxOrderByAggregateInput = {
@@ -415,6 +447,7 @@ export type FolderMaxOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   saves?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -426,17 +459,24 @@ export type FolderMinOrderByAggregateInput = {
   user_id?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   saves?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type FolderSumOrderByAggregateInput = {
   saves?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type FolderNullableScalarRelationFilter = {
   is?: Prisma.FolderWhereInput | null
   isNot?: Prisma.FolderWhereInput | null
+}
+
+export type FolderScalarRelationFilter = {
+  is?: Prisma.FolderWhereInput
+  isNot?: Prisma.FolderWhereInput
 }
 
 export type FolderCreateNestedManyWithoutUserInput = {
@@ -509,15 +549,31 @@ export type FolderUpdateOneWithoutFlashcardsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FolderUpdateToOneWithWhereWithoutFlashcardsInput, Prisma.FolderUpdateWithoutFlashcardsInput>, Prisma.FolderUncheckedUpdateWithoutFlashcardsInput>
 }
 
+export type FolderCreateNestedOneWithoutPracticeSessionsInput = {
+  create?: Prisma.XOR<Prisma.FolderCreateWithoutPracticeSessionsInput, Prisma.FolderUncheckedCreateWithoutPracticeSessionsInput>
+  connectOrCreate?: Prisma.FolderCreateOrConnectWithoutPracticeSessionsInput
+  connect?: Prisma.FolderWhereUniqueInput
+}
+
+export type FolderUpdateOneRequiredWithoutPracticeSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.FolderCreateWithoutPracticeSessionsInput, Prisma.FolderUncheckedCreateWithoutPracticeSessionsInput>
+  connectOrCreate?: Prisma.FolderCreateOrConnectWithoutPracticeSessionsInput
+  upsert?: Prisma.FolderUpsertWithoutPracticeSessionsInput
+  connect?: Prisma.FolderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FolderUpdateToOneWithWhereWithoutPracticeSessionsInput, Prisma.FolderUpdateWithoutPracticeSessionsInput>, Prisma.FolderUncheckedUpdateWithoutPracticeSessionsInput>
+}
+
 export type FolderCreateWithoutUserInput = {
   id?: string
   name: string
   description?: string | null
   isPublic?: boolean
   saves?: number
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   flashcards?: Prisma.FlashcardCreateNestedManyWithoutFolderInput
+  practiceSessions?: Prisma.PracticeSessionCreateNestedManyWithoutFolderInput
 }
 
 export type FolderUncheckedCreateWithoutUserInput = {
@@ -526,9 +582,11 @@ export type FolderUncheckedCreateWithoutUserInput = {
   description?: string | null
   isPublic?: boolean
   saves?: number
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutFolderInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type FolderCreateOrConnectWithoutUserInput = {
@@ -567,6 +625,7 @@ export type FolderScalarWhereInput = {
   user_id?: Prisma.StringFilter<"Folder"> | string
   isPublic?: Prisma.BoolFilter<"Folder"> | boolean
   saves?: Prisma.IntFilter<"Folder"> | number
+  version?: Prisma.IntFilter<"Folder"> | number
   createdAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
 }
@@ -577,9 +636,11 @@ export type FolderCreateWithoutFlashcardsInput = {
   description?: string | null
   isPublic?: boolean
   saves?: number
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutFoldersInput
+  practiceSessions?: Prisma.PracticeSessionCreateNestedManyWithoutFolderInput
 }
 
 export type FolderUncheckedCreateWithoutFlashcardsInput = {
@@ -589,8 +650,10 @@ export type FolderUncheckedCreateWithoutFlashcardsInput = {
   user_id: string
   isPublic?: boolean
   saves?: number
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  practiceSessions?: Prisma.PracticeSessionUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type FolderCreateOrConnectWithoutFlashcardsInput = {
@@ -615,9 +678,11 @@ export type FolderUpdateWithoutFlashcardsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutFoldersNestedInput
+  practiceSessions?: Prisma.PracticeSessionUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateWithoutFlashcardsInput = {
@@ -627,8 +692,78 @@ export type FolderUncheckedUpdateWithoutFlashcardsInput = {
   user_id?: Prisma.StringFieldUpdateOperationsInput | string
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  practiceSessions?: Prisma.PracticeSessionUncheckedUpdateManyWithoutFolderNestedInput
+}
+
+export type FolderCreateWithoutPracticeSessionsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  isPublic?: boolean
+  saves?: number
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  flashcards?: Prisma.FlashcardCreateNestedManyWithoutFolderInput
+  user: Prisma.UserCreateNestedOneWithoutFoldersInput
+}
+
+export type FolderUncheckedCreateWithoutPracticeSessionsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  user_id: string
+  isPublic?: boolean
+  saves?: number
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutFolderInput
+}
+
+export type FolderCreateOrConnectWithoutPracticeSessionsInput = {
+  where: Prisma.FolderWhereUniqueInput
+  create: Prisma.XOR<Prisma.FolderCreateWithoutPracticeSessionsInput, Prisma.FolderUncheckedCreateWithoutPracticeSessionsInput>
+}
+
+export type FolderUpsertWithoutPracticeSessionsInput = {
+  update: Prisma.XOR<Prisma.FolderUpdateWithoutPracticeSessionsInput, Prisma.FolderUncheckedUpdateWithoutPracticeSessionsInput>
+  create: Prisma.XOR<Prisma.FolderCreateWithoutPracticeSessionsInput, Prisma.FolderUncheckedCreateWithoutPracticeSessionsInput>
+  where?: Prisma.FolderWhereInput
+}
+
+export type FolderUpdateToOneWithWhereWithoutPracticeSessionsInput = {
+  where?: Prisma.FolderWhereInput
+  data: Prisma.XOR<Prisma.FolderUpdateWithoutPracticeSessionsInput, Prisma.FolderUncheckedUpdateWithoutPracticeSessionsInput>
+}
+
+export type FolderUpdateWithoutPracticeSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  flashcards?: Prisma.FlashcardUpdateManyWithoutFolderNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutFoldersNestedInput
+}
+
+export type FolderUncheckedUpdateWithoutPracticeSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  user_id?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderCreateManyUserInput = {
@@ -637,6 +772,7 @@ export type FolderCreateManyUserInput = {
   description?: string | null
   isPublic?: boolean
   saves?: number
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -647,9 +783,11 @@ export type FolderUpdateWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   flashcards?: Prisma.FlashcardUpdateManyWithoutFolderNestedInput
+  practiceSessions?: Prisma.PracticeSessionUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateWithoutUserInput = {
@@ -658,9 +796,11 @@ export type FolderUncheckedUpdateWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutFolderNestedInput
+  practiceSessions?: Prisma.PracticeSessionUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateManyWithoutUserInput = {
@@ -669,6 +809,7 @@ export type FolderUncheckedUpdateManyWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   saves?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -680,10 +821,12 @@ export type FolderUncheckedUpdateManyWithoutUserInput = {
 
 export type FolderCountOutputType = {
   flashcards: number
+  practiceSessions: number
 }
 
 export type FolderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   flashcards?: boolean | FolderCountOutputTypeCountFlashcardsArgs
+  practiceSessions?: boolean | FolderCountOutputTypeCountPracticeSessionsArgs
 }
 
 /**
@@ -703,6 +846,13 @@ export type FolderCountOutputTypeCountFlashcardsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.FlashcardWhereInput
 }
 
+/**
+ * FolderCountOutputType without action
+ */
+export type FolderCountOutputTypeCountPracticeSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PracticeSessionWhereInput
+}
+
 
 export type FolderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -711,10 +861,12 @@ export type FolderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   user_id?: boolean
   isPublic?: boolean
   saves?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   flashcards?: boolean | Prisma.Folder$flashcardsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  practiceSessions?: boolean | Prisma.Folder$practiceSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.FolderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["folder"]>
 
@@ -725,6 +877,7 @@ export type FolderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   user_id?: boolean
   isPublic?: boolean
   saves?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -737,6 +890,7 @@ export type FolderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   user_id?: boolean
   isPublic?: boolean
   saves?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -749,14 +903,16 @@ export type FolderSelectScalar = {
   user_id?: boolean
   isPublic?: boolean
   saves?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FolderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "user_id" | "isPublic" | "saves" | "createdAt" | "updatedAt", ExtArgs["result"]["folder"]>
+export type FolderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "user_id" | "isPublic" | "saves" | "version" | "createdAt" | "updatedAt", ExtArgs["result"]["folder"]>
 export type FolderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   flashcards?: boolean | Prisma.Folder$flashcardsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  practiceSessions?: boolean | Prisma.Folder$practiceSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.FolderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FolderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -771,6 +927,7 @@ export type $FolderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     flashcards: Prisma.$FlashcardPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs>
+    practiceSessions: Prisma.$PracticeSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -779,6 +936,7 @@ export type $FolderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     user_id: string
     isPublic: boolean
     saves: number
+    version: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["folder"]>
@@ -1177,6 +1335,7 @@ export interface Prisma__FolderClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   flashcards<T extends Prisma.Folder$flashcardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Folder$flashcardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FlashcardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  practiceSessions<T extends Prisma.Folder$practiceSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Folder$practiceSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PracticeSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1212,6 +1371,7 @@ export interface FolderFieldRefs {
   readonly user_id: Prisma.FieldRef<"Folder", 'String'>
   readonly isPublic: Prisma.FieldRef<"Folder", 'Boolean'>
   readonly saves: Prisma.FieldRef<"Folder", 'Int'>
+  readonly version: Prisma.FieldRef<"Folder", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Folder", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Folder", 'DateTime'>
 }
@@ -1631,6 +1791,30 @@ export type Folder$flashcardsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.FlashcardScalarFieldEnum | Prisma.FlashcardScalarFieldEnum[]
+}
+
+/**
+ * Folder.practiceSessions
+ */
+export type Folder$practiceSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PracticeSession
+   */
+  select?: Prisma.PracticeSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PracticeSession
+   */
+  omit?: Prisma.PracticeSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PracticeSessionInclude<ExtArgs> | null
+  where?: Prisma.PracticeSessionWhereInput
+  orderBy?: Prisma.PracticeSessionOrderByWithRelationInput | Prisma.PracticeSessionOrderByWithRelationInput[]
+  cursor?: Prisma.PracticeSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PracticeSessionScalarFieldEnum | Prisma.PracticeSessionScalarFieldEnum[]
 }
 
 /**

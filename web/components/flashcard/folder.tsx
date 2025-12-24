@@ -37,7 +37,7 @@ const Folder: React.FC<FolderProps> = ({ folder, isSummaryMode = false, mode, is
         duration: 0.5,
         ease: [0.4, 0, 0.2, 1],
       }}
-      whileHover={{ 
+      whileHover={{
         scale: 1.02,
         y: -4,
         transition: { duration: 0.3 }
@@ -45,8 +45,8 @@ const Folder: React.FC<FolderProps> = ({ folder, isSummaryMode = false, mode, is
       whileTap={{ scale: 0.98 }}
     >
       {isSummaryMode ? (
-        <div 
-          onClick={handleStudy} 
+        <div
+          onClick={handleStudy}
           className='flex flex-col h-full cursor-pointer hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-all duration-300 hover:shadow-lg border-2 border-border hover:border-orange-200 dark:hover:border-orange-900 rounded-xl bg-zinc-50/50 dark:bg-zinc-900 shadow-sm dark:shadow-[0_2px_8px_0_rgb(255_255_255_/_0.15),0_1px_4px_-1px_rgb(255_255_255_/_0.1)] gap-6 py-6'
         >
           <div className='flex-1 px-6'>
@@ -64,7 +64,7 @@ const Folder: React.FC<FolderProps> = ({ folder, isSummaryMode = false, mode, is
             </motion.div>
           </div>
           <div className='px-6'>
-            <motion.div 
+            <motion.div
               className="flex justify-end items-center gap-2 flex-wrap"
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -89,9 +89,9 @@ const Folder: React.FC<FolderProps> = ({ folder, isSummaryMode = false, mode, is
           </div>
         </div>
       ) : (
-        <Card 
-          onClick={handleStudy} 
-          className='flex flex-col h-full cursor-pointer hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-all duration-300 hover:shadow-lg border-2 border-transparent hover:border-orange-200 dark:hover:border-orange-900'
+        <Card
+          onClick={handleStudy}
+          className='flex flex-col h-full cursor-pointer hover:bg-orange-50/50 dark:hover:bg-orange-950/20 transition-all duration-300 border-2 border-border hover:border-orange-200 dark:hover:border-orange-900'
         >
           <CardHeader className='flex-1'>
             <motion.div
@@ -106,7 +106,7 @@ const Folder: React.FC<FolderProps> = ({ folder, isSummaryMode = false, mode, is
             </motion.div>
           </CardHeader>
           <CardContent>
-            <motion.div 
+            <motion.div
               className="flex justify-end items-center gap-2 flex-wrap"
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}

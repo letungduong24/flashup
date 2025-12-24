@@ -40,11 +40,13 @@ export interface PracticeSession {
   startTime: number;
   correctCount: number;
   incorrectCount: number;
+  isOutdated?: boolean;
 }
 
 export interface CreateSessionResponse {
   sessionId: string;
   questions: Question[];
+  isOutdated?: boolean;
 }
 
 export interface SubmitAnswerResponse {
@@ -61,4 +63,19 @@ export interface FinishSessionResponse {
   accuracy: number;
 }
 
+export interface EvaluateSentenceResponse {
+  status: 'correct' | 'minor-error' | 'suggestion' | 'wrong' | 'evaluation-error';
+  suggestion?: string;
+  suggestionTranslation?: string; // Vietnamese translation of the suggestion
+  explanation?: string;
+  wordUsageExplanation?: string;
+  errorTag?: string; // Granular error category
+  correction: string; // Keep for backward compatibility if needed, map to suggestion logic
+  tip: string; // Keep for backward compatibility if needed
+}
+
+export interface SubmitSentenceResponse {
+  evaluation: EvaluateSentenceResponse;
+  flashcard: FlashcardResponse;
+}
 

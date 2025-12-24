@@ -91,6 +91,17 @@ export function DynamicBreadcrumb() {
                     label: 'Điền từ',
                     isCurrentPage: isLast,
                 });
+            } else if (part === 'sentence') {
+                breadcrumbs.push({
+                    label: 'Viết câu',
+                    isCurrentPage: isLast,
+                });
+            } else if (part === 'profile') {
+                breadcrumbs.push({
+                    label: 'Hồ sơ cá nhân',
+                    href: isLast ? undefined : '/dashboard/profile',
+                    isCurrentPage: isLast,
+                });
             } else if (pathParts[i - 1] === 'folder' && params.id) {
                 // This is a folder ID
                 const folderId = part;

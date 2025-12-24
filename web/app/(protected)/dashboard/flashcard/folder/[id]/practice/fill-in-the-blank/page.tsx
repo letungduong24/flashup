@@ -56,17 +56,29 @@ export default function FillInTheBlankPracticePage() {
   // Initialize or restore session (only once)
   useEffect(() => {
     let isMounted = true;
-    
+    const currentStoreState = useFillInTheBlankStore.getState();
+
+    // If folderId changed, reset store first
+    if (currentStoreState.folderId && currentStoreState.folderId !== folderId) {
+      useFillInTheBlankStore.getState().reset();
+    }
+
     const initializeOrRestoreSession = async () => {
       try {
         // 1. Check sessionId from URL query params
         const sessionIdFromUrl = searchParams.get('sessionId');
-        
+
         // 2. If not in URL, check localStorage
-        const sessionIdToRestore = sessionIdFromUrl || 
-          (typeof window !== 'undefined' 
+        const sessionIdToRestore = sessionIdFromUrl ||
+          (typeof window !== 'undefined'
             ? localStorage.getItem(`practice:fill-in-the-blank:session:${folderId}`)
             : null);
+
+        // Check if current session in store is valid for this folder
+        const storeState = useFillInTheBlankStore.getState();
+        if (storeState.sessionId && storeState.folderId === folderId && !storeState.isFinished) {
+          return; // Already has valid session
+        }
 
         // 3. If has sessionId, try to restore
         if (sessionIdToRestore) {
@@ -108,10 +120,7 @@ export default function FillInTheBlankPracticePage() {
       }
     };
 
-    // Initialize if no sessionId OR if session is finished (need to create new)
-    if (folderId && (!sessionId || isFinished)) {
-      initializeOrRestoreSession();
-    }
+    initializeOrRestoreSession();
 
     return () => {
       isMounted = false;
@@ -166,7 +175,7 @@ export default function FillInTheBlankPracticePage() {
 
   const handlePlayAudio = async () => {
     if (!questions[currentIndex] || localIsPlayingAudio) return;
-    
+
     setLocalIsPlayingAudio(true);
     try {
       await playAudioWithFallback(
@@ -235,7 +244,7 @@ export default function FillInTheBlankPracticePage() {
               className="w-full"
               size="lg"
             >
-              Quay lại folder
+              Quay lại Flashbook
             </Button>
           </CardContent>
         </Card>

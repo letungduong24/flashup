@@ -37,10 +37,10 @@ export default function FolderDetailPage() {
   const params = useParams();
   const router = useRouter();
   const folderId = params.id as string;
-  const { 
-    currentFolder, 
-    loading: folderLoading, 
-    getFolder, 
+  const {
+    currentFolder,
+    loading: folderLoading,
+    getFolder,
     removeFlashcardFromCurrentFolder,
     updateFolder,
     deleteFolder,
@@ -48,15 +48,15 @@ export default function FolderDetailPage() {
     updateLoading,
     deleteLoading
   } = useFolderStore();
-  const { 
-    flashcards, 
-    pagination, 
+  const {
+    flashcards,
+    pagination,
     filters,
-    loading, 
+    loading,
     loadingMore,
-    fetchFlashcards, 
+    fetchFlashcards,
     loadMoreFlashcards,
-    setFilters 
+    setFilters
   } = useFlashcardStore();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -66,7 +66,7 @@ export default function FolderDetailPage() {
   const [pendingPublicState, setPendingPublicState] = useState<boolean | null>(null);
   const [searchInput, setSearchInput] = useState('');
   const [isPracticeModeDialogOpen, setIsPracticeModeDialogOpen] = useState(false);
-  
+
   // Debounced search value
   const debouncedSearch = useDebounce(searchInput, 500);
 
@@ -106,8 +106,8 @@ export default function FolderDetailPage() {
   };
 
   const hasActiveFilters = !!(
-    filters.search || 
-    filters.isRemembered !== undefined || 
+    filters.search ||
+    filters.isRemembered !== undefined ||
     (filters.sortBy && filters.sortBy !== 'createdAt') ||
     (filters.sortOrder && filters.sortOrder !== 'desc')
   );
@@ -242,8 +242,8 @@ export default function FolderDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Sidebar - 1/4 */}
         <div className="lg:col-span-1 space-y-4">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
-            <motion.div 
+          <div className="grid grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
+            <motion.div
               className="group cursor-pointer bg-gradient-to-br w-full from-orange-300 to-orange-500 p-4 rounded-2xl flex flex-col justify-center items-start"
               onClick={() => router.push(`/dashboard/flashcard/folder/${folderId}/study`)}
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -253,22 +253,22 @@ export default function FolderDetailPage() {
                 ease: [0.4, 0, 0.2, 1],
                 delay: 0.1,
               }}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.05,
                 y: -4,
                 transition: { duration: 0.3 }
               }}
               whileTap={{ scale: 0.98 }}
             >
-              <motion.div 
+              <motion.div
                 className="flex justify-start"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                <GiBlackBook className='group-hover:scale-150 group-hover:rotate-180 transition-all duration-300 text-xl font-bold text-white'/>
+                <GiBlackBook className='group-hover:scale-150 group-hover:rotate-180 transition-all duration-300 text-xl font-bold text-white' />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="flex flex-col items-end w-full"
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -279,9 +279,16 @@ export default function FolderDetailPage() {
             </motion.div>
 
             {/* Practice Button */}
-            <motion.div 
-              className="group cursor-pointer bg-gradient-to-br w-full from-blue-300 to-blue-500 p-4 rounded-2xl flex flex-col justify-center items-start"
-              onClick={() => setIsPracticeModeDialogOpen(true)}
+            <motion.div
+              className={`group cursor-pointer p-4 rounded-2xl flex flex-col justify-center items-start ${(pagination?.total || 0) === 0
+                  ? 'bg-gray-400 dark:bg-gray-600'
+                  : 'bg-gradient-to-br from-blue-300 to-blue-500'
+                }`}
+              onClick={() => {
+                if ((pagination?.total || 0) > 0) {
+                  setIsPracticeModeDialogOpen(true);
+                }
+              }}
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{
@@ -289,22 +296,26 @@ export default function FolderDetailPage() {
                 ease: [0.4, 0, 0.2, 1],
                 delay: 0.12,
               }}
-              whileHover={{ 
+              whileHover={(pagination?.total || 0) > 0 ? {
                 scale: 1.05,
                 y: -4,
                 transition: { duration: 0.3 }
+              } : {}}
+              whileTap={(pagination?.total || 0) > 0 ? { scale: 0.98 } : {}}
+              style={{
+                opacity: (pagination?.total || 0) === 0 ? 0.5 : 1,
+                cursor: (pagination?.total || 0) === 0 ? 'not-allowed' : 'pointer',
               }}
-              whileTap={{ scale: 0.98 }}
             >
-              <motion.div 
+              <motion.div
                 className="flex justify-start"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.22, duration: 0.4 }}
               >
-                <BookOpen className='group-hover:scale-150 group-hover:rotate-12 transition-all duration-300 text-xl font-bold text-white'/>
+                <BookOpen className='group-hover:scale-150 group-hover:rotate-12 transition-all duration-300 text-xl font-bold text-white' />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="flex flex-col items-end w-full"
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -314,7 +325,7 @@ export default function FolderDetailPage() {
               </motion.div>
             </motion.div>
           </div>
-          <motion.div 
+          <motion.div
             className="sticky top-20 p-4 h-fit border border-zinc-300 dark:border-zinc-700 rounded-2xl space-y-4"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -324,7 +335,7 @@ export default function FolderDetailPage() {
               delay: 0.15,
             }}
           >
-          {/* Study Button */}
+            {/* Study Button */}
             {/* Folder info & actions */}
             <div className="flex flex-col gap-4">
               <p className="text-sm text-muted-foreground">
@@ -333,7 +344,7 @@ export default function FolderDetailPage() {
                   <span className="ml-2">• {currentFolder.saves} lượt lưu</span>
                 )}
               </p>
-              
+
               <motion.div
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
@@ -344,21 +355,21 @@ export default function FolderDetailPage() {
                   Tạo Flashcard
                 </Button>
               </motion.div>
-              
+
               <div className="flex items-center gap-2 flex-wrap">
                 <ButtonGroup className='flex-1'>
-                  <Button 
-                    className='w-1/2' 
-                    variant={'outline'} 
+                  <Button
+                    className='w-1/2'
+                    variant={'outline'}
                     size="sm"
                     onClick={handleEditFolder}
                     disabled={updateLoading}
                   >
                     <FaEdit />Sửa
                   </Button>
-                  <Button 
-                    className='w-1/2' 
-                    variant={'outline'} 
+                  <Button
+                    className='w-1/2'
+                    variant={'outline'}
                     size="sm"
                     onClick={() => setIsDeleteDialogOpen(true)}
                     disabled={deleteLoading}
@@ -366,7 +377,7 @@ export default function FolderDetailPage() {
                     <MdDelete />Xóa
                   </Button>
                 </ButtonGroup>
-                
+
               </div>
             </div>
 
@@ -472,8 +483,8 @@ export default function FolderDetailPage() {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {flashcards.map((flashcard) => (
-                  <MiniFlashcard 
-                    key={flashcard.id} 
+                  <MiniFlashcard
+                    key={flashcard.id}
                     flashcard={flashcard}
                     onDelete={() => {
                       removeFlashcardFromCurrentFolder(flashcard.id);
@@ -512,7 +523,7 @@ export default function FolderDetailPage() {
                     {hasActiveFilters ? 'Không tìm thấy kết quả' : 'Chưa có flashcard'}
                   </EmptyTitle>
                   <EmptyDescription>
-                    {hasActiveFilters 
+                    {hasActiveFilters
                       ? 'Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm.'
                       : 'Folder này chưa có flashcard nào. Hãy thêm flashcard để bắt đầu học.'}
                   </EmptyDescription>
@@ -529,7 +540,7 @@ export default function FolderDetailPage() {
           )}
         </div>
       </div>
-      
+
       <CreateFlashcardModal
         open={isCreateModalOpen}
         onOpenChange={setIsCreateModalOpen}
@@ -554,7 +565,7 @@ export default function FolderDetailPage() {
           <DialogHeader>
             <DialogTitle>Xóa Flashbook</DialogTitle>
             <DialogDescription>
-              Bạn có chắc chắn muốn xóa flashbook "{currentFolder?.name}"? 
+              Bạn có chắc chắn muốn xóa flashbook "{currentFolder?.name}"?
               Hành động này không thể hoàn tác và sẽ xóa tất cả flashcard trong flashbook này.
             </DialogDescription>
           </DialogHeader>
@@ -577,8 +588,8 @@ export default function FolderDetailPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog 
-        open={isShareDialogOpen} 
+      <Dialog
+        open={isShareDialogOpen}
         onOpenChange={(open) => {
           setIsShareDialogOpen(open);
           // Nếu đóng dialog mà chưa xác nhận, revert switch về trạng thái ban đầu
@@ -613,8 +624,8 @@ export default function FolderDetailPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog 
-        open={isUnshareDialogOpen} 
+      <Dialog
+        open={isUnshareDialogOpen}
         onOpenChange={(open) => {
           setIsUnshareDialogOpen(open);
           // Nếu đóng dialog mà chưa xác nhận, revert switch về trạng thái ban đầu
@@ -659,6 +670,8 @@ export default function FolderDetailPage() {
             router.push(`/dashboard/flashcard/folder/${folderId}/practice/fill-in-the-blank`);
           } else if (mode === 'multiple-choice') {
             router.push(`/dashboard/flashcard/folder/${folderId}/practice/multiple-choice`);
+          } else if (mode === 'sentence') {
+            router.push(`/dashboard/flashcard/folder/${folderId}/practice/sentence`);
           }
         }}
       />

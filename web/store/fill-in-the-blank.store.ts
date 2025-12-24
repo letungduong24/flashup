@@ -11,24 +11,25 @@ import {
 interface FillInTheBlankState {
   // Session data
   sessionId: string | null;
+  folderId: string | null;
   questions: Question[];
   currentIndex: number;
-  
+
   // Answer state
   userAnswer: string;
   isAnswered: boolean;
   isCorrect: boolean;
-  
+
   // Stats
   correctCount: number;
   incorrectCount: number;
-  
+
   // Status
   loading: boolean;
   submitting: boolean;
   isFinished: boolean;
   result: FinishSessionResponse | null;
-  
+
   // Actions
   createSession: (folderId: string) => Promise<void>;
   restoreSession: (sessionId: string) => Promise<{ restored: boolean; isFinished: boolean }>;
@@ -46,6 +47,7 @@ interface FillInTheBlankState {
 const useFillInTheBlankStore = create<FillInTheBlankState>((set, get) => ({
   // Initial state
   sessionId: null,
+  folderId: null,
   questions: [],
   currentIndex: 0,
   userAnswer: '',
@@ -63,7 +65,7 @@ const useFillInTheBlankStore = create<FillInTheBlankState>((set, get) => ({
     set({ sessionId: id });
     const key = `practice:fill-in-the-blank:session:${folderId}`;
     localStorage.setItem(key, id);
-    
+
     // Update URL
     if (typeof window !== 'undefined') {
       const url = new URL(window.location.href);
@@ -79,7 +81,7 @@ const useFillInTheBlankStore = create<FillInTheBlankState>((set, get) => ({
       localStorage.removeItem(`practice:fill-in-the-blank:session:${sessionId}`);
     }
     localStorage.removeItem(`practice:fill-in-the-blank:session:${folderId}`);
-    
+
     // Update URL
     if (typeof window !== 'undefined') {
       const url = new URL(window.location.href);
@@ -95,6 +97,7 @@ const useFillInTheBlankStore = create<FillInTheBlankState>((set, get) => ({
       // Reset all state before creating new session
       set({
         sessionId: null,
+        folderId: null,
         questions: [],
         currentIndex: 0,
         userAnswer: '',
@@ -115,6 +118,7 @@ const useFillInTheBlankStore = create<FillInTheBlankState>((set, get) => ({
 
       set({
         sessionId,
+        folderId,
         questions,
         currentIndex: 0,
         correctCount: 0,
@@ -154,6 +158,7 @@ const useFillInTheBlankStore = create<FillInTheBlankState>((set, get) => ({
       // Session is not finished and is fill-in-the-blank, restore it
       set({
         sessionId: session.id,
+        folderId: session.folderId,
         questions: session.questions,
         currentIndex: session.currentIndex,
         correctCount: session.correctCount,
@@ -256,6 +261,7 @@ const useFillInTheBlankStore = create<FillInTheBlankState>((set, get) => ({
   reset: () => {
     set({
       sessionId: null,
+      folderId: null,
       questions: [],
       currentIndex: 0,
       userAnswer: '',
@@ -273,7 +279,7 @@ const useFillInTheBlankStore = create<FillInTheBlankState>((set, get) => ({
   // Restart session - delete old session and create new one
   restartSession: async (folderId: string) => {
     const { sessionId } = get();
-    
+
     // Delete old session from Redis if exists
     if (sessionId) {
       try {

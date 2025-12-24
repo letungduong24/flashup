@@ -42,3 +42,18 @@ export type StudyCount = Prisma.StudyCountModel
  * 
  */
 export type Attendance = Prisma.AttendanceModel
+/**
+ * Model PracticeSession
+ * 
+ */
+export type PracticeSession = Prisma.PracticeSessionModel
+/**
+ * Model PracticeSessionQuestion
+ * 
+ */
+export type PracticeSessionQuestion = Prisma.PracticeSessionQuestionModel
+/**
+ * Model PracticeSessionAnswer
+ * 
+ */
+export type PracticeSessionAnswer = Prisma.PracticeSessionAnswerModel

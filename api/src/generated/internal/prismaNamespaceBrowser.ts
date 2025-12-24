@@ -55,7 +55,10 @@ export const ModelName = {
   Folder: 'Folder',
   Flashcard: 'Flashcard',
   StudyCount: 'StudyCount',
-  Attendance: 'Attendance'
+  Attendance: 'Attendance',
+  PracticeSession: 'PracticeSession',
+  PracticeSessionQuestion: 'PracticeSessionQuestion',
+  PracticeSessionAnswer: 'PracticeSessionAnswer'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -97,6 +100,7 @@ export const FolderScalarFieldEnum = {
   user_id: 'user_id',
   isPublic: 'isPublic',
   saves: 'saves',
+  version: 'version',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -147,6 +151,52 @@ export const AttendanceScalarFieldEnum = {
 } as const
 
 export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
+
+
+export const PracticeSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  folderId: 'folderId',
+  folderVersion: 'folderVersion',
+  mode: 'mode',
+  status: 'status',
+  currentIndex: 'currentIndex',
+  correctCount: 'correctCount',
+  incorrectCount: 'incorrectCount',
+  summary: 'summary',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PracticeSessionScalarFieldEnum = (typeof PracticeSessionScalarFieldEnum)[keyof typeof PracticeSessionScalarFieldEnum]
+
+
+export const PracticeSessionQuestionScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  flashcardId: 'flashcardId',
+  question: 'question',
+  answer: 'answer',
+  options: 'options',
+  order: 'order'
+} as const
+
+export type PracticeSessionQuestionScalarFieldEnum = (typeof PracticeSessionQuestionScalarFieldEnum)[keyof typeof PracticeSessionQuestionScalarFieldEnum]
+
+
+export const PracticeSessionAnswerScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  questionId: 'questionId',
+  userAnswer: 'userAnswer',
+  isCorrect: 'isCorrect',
+  evaluation: 'evaluation',
+  answeredAt: 'answeredAt'
+} as const
+
+export type PracticeSessionAnswerScalarFieldEnum = (typeof PracticeSessionAnswerScalarFieldEnum)[keyof typeof PracticeSessionAnswerScalarFieldEnum]
 
 
 export const SortOrder = {

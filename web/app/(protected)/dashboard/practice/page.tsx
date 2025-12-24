@@ -32,14 +32,14 @@ export default function PracticePage() {
     {
       mode: 'write-sentence' as PracticeMode,
       label: 'Viết câu',
-      description: 'Viết câu hoàn chỉnh từ từ gợi ý',
+      description: 'Viết câu hoàn chỉnh từ các từ trong Flashbook',
       icon: <FileText className="h-8 w-8 text-primary" />,
-      available: false,
+      available: true,
     },
     {
       mode: 'write-paragraph' as PracticeMode,
       label: 'Viết đoạn văn ngắn',
-      description: 'Viết đoạn văn ngắn từ các từ gợi ý',
+      description: 'Viết đoạn văn ngắn từ các từ trong Flashbook',
       icon: <BookOpen className="h-8 w-8 text-primary" />,
       available: false,
     },
@@ -47,7 +47,7 @@ export default function PracticePage() {
 
   const handleSelectMode = (mode: PracticeMode) => {
     if (!mode) return;
-    
+
     const modeConfig = practiceModes.find(m => m.mode === mode);
     if (!modeConfig?.available) return;
 
@@ -62,8 +62,10 @@ export default function PracticePage() {
       router.push(`/dashboard/flashcard/folder/${folderId}/practice/fill-in-the-blank`);
     } else if (selectedMode === 'multiple-choice') {
       router.push(`/dashboard/flashcard/folder/${folderId}/practice/multiple-choice`);
+    } else if (selectedMode === 'write-sentence') {
+      router.push(`/dashboard/flashcard/folder/${folderId}/practice/sentence`);
     }
-    // Other modes (write-sentence, write-paragraph) are not available yet
+    // write-paragraph is not available yet
   };
 
   return (

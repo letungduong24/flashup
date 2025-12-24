@@ -16,6 +16,7 @@ export interface FlashcardResponse {
 }
 
 export interface Question {
+  id?: string; // DB ID
   flashcardId: string;
   question: string;
   answer: string;
@@ -40,11 +41,13 @@ export interface PracticeSession {
   startTime: number;
   correctCount: number;
   incorrectCount: number;
+  isOutdated?: boolean;
 }
 
 export interface CreateSessionResponse {
   sessionId: string;
   questions: Question[];
+  isOutdated?: boolean;
 }
 
 export interface SubmitAnswerResponse {
@@ -61,4 +64,14 @@ export interface FinishSessionResponse {
   accuracy: number;
 }
 
+export interface EvaluateSentenceResponse {
+  status: 'correct' | 'minor-error' | 'suggestion' | 'wrong';
+  suggestion?: string; // Sentence suggestion
+  suggestionTranslation?: string; // Vietnamese translation of the suggestion
+  explanation?: string; // Why the suggestion is better or what was wrong
+  wordUsageExplanation?: string; // Only for 'wrong' state: how to use the word correctly
+  errorTag?: string; // Granular error category
+  correction: string; // Keep for backward compatibility if needed, map to suggestion logic
+  tip: string; // Keep for backward compatibility if needed
+}
 

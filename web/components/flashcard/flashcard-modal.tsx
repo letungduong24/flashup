@@ -27,9 +27,9 @@ interface FlashcardModalProps {
   previewMode?: boolean;
 }
 
-const FlashcardModal: React.FC<FlashcardModalProps> = ({ 
-  flashcard, 
-  open, 
+const FlashcardModal: React.FC<FlashcardModalProps> = ({
+  flashcard,
+  open,
   onOpenChange,
   onEdit,
   onDelete,
@@ -40,7 +40,7 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
 
   const playWordSound = async () => {
     if (!flashcard || isPlayingWord) return;
-    
+
     setIsPlayingWord(true);
     try {
       await playAudioWithFallback(
@@ -63,7 +63,7 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
 
   const handleDelete = async () => {
     if (!flashcard) return;
-    
+
     if (window.confirm('Bạn có chắc chắn muốn xóa flashcard này?')) {
       await deleteFlashcard(flashcard.id);
       onOpenChange(false);
@@ -75,7 +75,7 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
 
   const handleResetReviewCount = async () => {
     if (!flashcard) return;
-    
+
     await updateFlashcard(flashcard.id, {
       name: flashcard.name,
       meaning: flashcard.meaning,
@@ -103,8 +103,8 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
             <DialogTitle className="text-2xl font-bold text-center">
               {flashcard.name}
             </DialogTitle>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={playWordSound}
               disabled={isPlayingWord}
             >
@@ -117,7 +117,7 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
         <div className="flex-shrink-0 text-center py-2 border-b">
           <p className="text-base text-muted-foreground">{flashcard.meaning}</p>
         </div>
-        
+
         {/* Nội dung scroll được */}
         <div className="flex-1 overflow-y-auto">
           <div className="w-full flex flex-col gap-4 items-center justify-center border-0 ">
@@ -140,7 +140,7 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
                 ))}
               </div>
             )}
-            
+
             {!previewMode && (
               <div className="flex items-center justify-center gap-4">
                 <div className="text-sm text-muted-foreground">
@@ -156,7 +156,7 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
                 )}
               </div>
             )}
-            
+
             {flashcard.tags && flashcard.tags.length > 0 && (
               <div className=" flex flex-wrap gap-2 justify-center">
                 {flashcard.tags.map((tag, index) => (
@@ -176,24 +176,24 @@ const FlashcardModal: React.FC<FlashcardModalProps> = ({
         {!previewMode && (
           <div className="flex-shrink-0 flex justify-center pt-4 border-t">
             <ButtonGroup>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={handleEdit}
                 disabled={updateLoading || deleteLoading || !onEdit}
               >
                 <FaEdit />
                 Sửa
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={handleResetReviewCount}
                 disabled={updateLoading || deleteLoading}
               >
                 <RotateCcw />
                 Reset lần học
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={handleDelete}
                 disabled={updateLoading || deleteLoading || !onDelete}
               >

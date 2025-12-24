@@ -10,7 +10,7 @@ export class FlashcardsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly geminiService: GeminiService,
-  ) {}
+  ) { }
 
   async create(userId: string, folderId: string | null, flashcardRequest: FlashcardRequestDto) {
     // If folder_id is provided, verify ownership
@@ -39,7 +39,7 @@ export class FlashcardsService {
       }
     }
 
-    return this.prisma.flashcard.create({
+    const flashcard = await this.prisma.flashcard.create({
       data: {
         name: flashcardRequest.name,
         meaning: flashcardRequest.meaning,
@@ -55,6 +55,16 @@ export class FlashcardsService {
         tags: flashcardRequest.tags ?? [],
       },
     });
+
+    // Increment folder version if flashcard is added to a folder
+    if (flashcard.folder_id) {
+      await this.prisma.folder.update({
+        where: { id: flashcard.folder_id },
+        data: { version: { increment: 1 } },
+      });
+    }
+
+    return flashcard;
   }
 
   async findAll(
@@ -68,6 +78,7 @@ export class FlashcardsService {
       sortOrder?: 'asc' | 'desc';
     } = {},
   ) {
+    // ... (unchanged)
     const {
       folderId,
       page = 1,
@@ -143,6 +154,7 @@ export class FlashcardsService {
   }
 
   async findOne(userId: string, id: string) {
+    // ... (unchanged)
     const flashcard = await this.prisma.flashcard.findUnique({
       where: { id },
       include: {
@@ -252,9 +264,26 @@ export class FlashcardsService {
       data: updateData,
     });
 
+    // Increment version for old folder (if moved) and new/current folder
+    if (flashcard.folder_id) {
+      await this.prisma.folder.update({
+        where: { id: flashcard.folder_id },
+        data: { version: { increment: 1 } },
+      });
+    }
+
+    // If moved to a different folder, increment that one too
+    if (updatedFlashcard.folder_id && updatedFlashcard.folder_id !== flashcard.folder_id) {
+      await this.prisma.folder.update({
+        where: { id: updatedFlashcard.folder_id },
+        data: { version: { increment: 1 } },
+      });
+    }
+
     return updatedFlashcard;
   }
 
+  // ... (checkAudioAvailability and generateFlashcard unchanged)
   async checkAudioAvailability(word: string) {
     const result = await getCambridgeUsVoice(word);
     return {
@@ -317,6 +346,14 @@ export class FlashcardsService {
     await this.prisma.flashcard.delete({
       where: { id },
     });
+
+    // Increment folder version
+    if (flashcard.folder_id) {
+      await this.prisma.folder.update({
+        where: { id: flashcard.folder_id },
+        data: { version: { increment: 1 } },
+      });
+    }
 
     return { message: 'Xóa flashcard thành công' };
   }

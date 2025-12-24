@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { FileQuestion, Pencil } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-type PracticeMode = 'multiple-choice' | 'fill-in-the-blank' | null;
+type PracticeMode = 'multiple-choice' | 'fill-in-the-blank' | 'sentence' | null;
 
 interface PracticeModeDialogProps {
   open: boolean;
@@ -38,7 +38,7 @@ export default function PracticeModeDialog({
             Chọn một trong các chế độ luyện tập để bắt đầu
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="grid grid-cols-1 gap-4 py-4">
           {/* Multiple Choice Mode */}
           <motion.div
@@ -80,6 +80,29 @@ export default function PracticeModeDialog({
                   <div className="font-semibold">Điền từ</div>
                   <div className="text-sm text-muted-foreground font-normal">
                     Điền từ tiếng Anh vào chỗ trống
+                  </div>
+                </div>
+              </div>
+            </Button>
+          </motion.div>
+
+          {/* Sentence Mode */}
+          <motion.div
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <Button
+              variant="outline"
+              className="w-full h-auto p-6 flex flex-col items-start gap-3 hover:bg-accent"
+              onClick={() => handleSelectMode('sentence')}
+            >
+              <div className="flex items-center gap-3 w-full">
+                <Pencil className="h-6 w-6 text-primary" />
+                <div className="flex-1 text-left">
+                  <div className="font-semibold">Viết câu</div>
+                  <div className="text-sm text-muted-foreground font-normal">
+                    Luyện đặt câu với từ vựng và nhận feedback AI
                   </div>
                 </div>
               </div>

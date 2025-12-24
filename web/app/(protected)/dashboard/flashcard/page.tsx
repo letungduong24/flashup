@@ -8,11 +8,9 @@ import useFolderStore from '@/store/folder.store';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BsFolder } from "react-icons/bs";
-import { PiStarFour } from "react-icons/pi";
 import { FaPlus } from "react-icons/fa";
-import { Search, X, Loader2 } from 'lucide-react';
-import CreateFolderModal from '@/components/flashcard/create-folder-modal';
-import AIAssistantModal from '@/components/flashcard/ai-assistant-modal';
+import { Search, X, Loader2, Plus } from 'lucide-react';
+import CreateFlashbookModal from '@/components/flashcard/create-flashbook-modal';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useDebounce, useInfiniteScroll } from '@/hooks';
@@ -21,20 +19,19 @@ import { motion } from 'framer-motion';
 
 export default function FlashcardPage() {
   const router = useRouter();
-  const { 
-    folders, 
+  const {
+    folders,
     pagination,
     filters,
-    loading, 
+    loading,
     loadingMore,
-    fetchFolders, 
+    fetchFolders,
     loadMoreFolders,
-    setFilters 
+    setFilters
   } = useFolderStore();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const [searchInput, setSearchInput] = useState('');
-  
+
   const debouncedSearch = useDebounce(searchInput, 500);
 
   // Infinite scroll
@@ -76,10 +73,7 @@ export default function FlashcardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-xl md:text-2xl font-bold">Flashbook</h1>
-        <Button onClick={() => setIsCreateModalOpen(true)}>
-          <FaPlus />
-          <span className='hidden sm:block'>Tạo Flashbook</span>
-        </Button>
+        {/* Removed duplicate Create button from header as requested */}
       </div>
 
       {/* Main content with sidebar */}
@@ -89,10 +83,10 @@ export default function FlashcardPage() {
           <div className="sticky top-20 space-y-4">
             <div className="grid grid-cols-2 gap-4">
 
-              {/* AI Assistant */}
-              <motion.div 
+              {/* Create Flashbook (formerly AI Assistant) */}
+              <motion.div
                 className="group cursor-pointer bg-gradient-to-br w-full from-orange-300 to-orange-500 p-4 rounded-2xl flex flex-col justify-center items-start"
-                onClick={() => setIsAIModalOpen(true)}
+                onClick={() => setIsCreateModalOpen(true)}
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{
@@ -100,34 +94,34 @@ export default function FlashcardPage() {
                   ease: [0.4, 0, 0.2, 1],
                   delay: 0.1,
                 }}
-                whileHover={{ 
+                whileHover={{
                   scale: 1.05,
                   y: -4,
                   transition: { duration: 0.3 }
                 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <motion.div 
+                <motion.div
                   className="flex justify-start"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
                 >
-                  <PiStarFour className='group-hover:scale-150 group-hover:rotate-180 transition-all duration-300 text-xl font-bold text-white'/>
+                  <Plus className='group-hover:rotate-90 transition-all duration-300 h-8 w-8 font-bold text-white' />
                 </motion.div>
-                <motion.div 
+                <motion.div
                   className="flex flex-col items-end w-full"
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.25, duration: 0.4 }}
                 >
-                  <h1 className='font-bold text-white text-xl'>Trợ lý AI</h1>
-                  <p className='text-xs text-white'>Tạo Flashbook với AI</p>
+                  <h1 className='font-bold text-white text-xl'>Tạo Flashbook</h1>
+                  <p className='text-xs text-white text-right'>Học Flashcard theo nhóm</p>
                 </motion.div>
               </motion.div>
 
               {/* Explore */}
-              <motion.div 
+              <motion.div
                 className="group cursor-pointer border border-zinc-300 p-4 rounded-2xl flex flex-col justify-center items-start"
                 onClick={() => router.push('/dashboard/explore')}
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -137,22 +131,22 @@ export default function FlashcardPage() {
                   ease: [0.4, 0, 0.2, 1],
                   delay: 0.15,
                 }}
-                whileHover={{ 
+                whileHover={{
                   scale: 1.05,
                   y: -4,
                   transition: { duration: 0.3 }
                 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <motion.div 
+                <motion.div
                   className="flex justify-start"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.25, duration: 0.4 }}
                 >
-                  <MdElectricBolt className='group-hover:scale-150 group-hover:rotate-180 transition-all duration-300 text-xl font-bold'/>
+                  <MdElectricBolt className='group-hover:scale-150 group-hover:rotate-180 transition-all duration-300 text-xl font-bold' />
                 </motion.div>
-                <motion.div 
+                <motion.div
                   className="flex flex-col items-end w-full"
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -165,7 +159,7 @@ export default function FlashcardPage() {
             </div>
 
             {/* Search & Filter */}
-            <motion.div 
+            <motion.div
               className="p-4 border border-zinc-300 dark:border-zinc-700 rounded-2xl space-y-4"
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -275,7 +269,7 @@ export default function FlashcardPage() {
                     {hasActiveFilters ? 'Không tìm thấy kết quả' : 'Chưa có bộ sưu tập'}
                   </EmptyTitle>
                   <EmptyDescription>
-                    {hasActiveFilters 
+                    {hasActiveFilters
                       ? 'Thử thay đổi từ khóa tìm kiếm.'
                       : 'Bạn chưa có bộ sưu tập Flashcard nào. Hãy tạo bộ sưu tập mới để bắt đầu học.'}
                   </EmptyDescription>
@@ -292,14 +286,10 @@ export default function FlashcardPage() {
           )}
         </div>
       </div>
-      
-      <CreateFolderModal
+
+      <CreateFlashbookModal
         open={isCreateModalOpen}
         onOpenChange={setIsCreateModalOpen}
-      />
-      <AIAssistantModal
-        open={isAIModalOpen}
-        onOpenChange={setIsAIModalOpen}
       />
     </div>
   );

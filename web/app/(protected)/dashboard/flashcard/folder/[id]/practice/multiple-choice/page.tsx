@@ -56,6 +56,12 @@ export default function MultipleChoicePracticePage() {
   // Initialize or restore session (only once)
   useEffect(() => {
     let isMounted = true;
+    const currentStoreState = useMultipleChoiceStore.getState();
+
+    // If folderId changed, reset store first
+    if (currentStoreState.folderId && currentStoreState.folderId !== folderId) {
+      useMultipleChoiceStore.getState().reset();
+    }
 
     const initializeOrRestoreSession = async () => {
       try {
@@ -64,6 +70,12 @@ export default function MultipleChoicePracticePage() {
           (typeof window !== 'undefined'
             ? localStorage.getItem(`practice:multiple-choice:session:${folderId}`)
             : null);
+
+        // Check if current session in store is valid for this folder
+        const storeState = useMultipleChoiceStore.getState();
+        if (storeState.sessionId && storeState.folderId === folderId && !storeState.isFinished) {
+          return; // Already has valid session
+        }
 
         if (sessionIdToRestore) {
           try {
@@ -97,9 +109,7 @@ export default function MultipleChoicePracticePage() {
       }
     };
 
-    if (folderId && (!sessionId || isFinished)) {
-      initializeOrRestoreSession();
-    }
+    initializeOrRestoreSession();
 
     return () => {
       isMounted = false;
@@ -225,7 +235,7 @@ export default function MultipleChoicePracticePage() {
               className="w-full"
               size="lg"
             >
-              Quay lại folder
+              Quay lại Flashbook
             </Button>
           </CardContent>
         </Card>

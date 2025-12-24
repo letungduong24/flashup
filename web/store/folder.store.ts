@@ -2,8 +2,8 @@ import { create } from 'zustand';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import api from '@/lib/axios';
-import { 
-  FolderResponse, 
+import {
+  FolderResponse,
   FolderRequest,
   FolderWithFlashcards,
   folderRequestSchema,
@@ -36,14 +36,14 @@ interface FolderState {
   deleteLoading: boolean;
   generateLoading: boolean;
   savingLoading: boolean;
-  
+
   // Public folders state
   publicFolders: FolderResponse[];
   publicPagination: Pagination | null;
   publicFilters: PublicFolderFilters;
   publicLoading: boolean;
   publicLoadingMore: boolean;
-  
+
   // Actions
   fetchFolders: (resetFilters?: boolean) => Promise<void>;
   loadMoreFolders: () => Promise<void>;
@@ -59,7 +59,7 @@ interface FolderState {
   setCurrentFolder: (folder: FolderResponse | null) => void;
   removeFlashcardFromCurrentFolder: (flashcardId: string) => void;
   clearFolders: () => void;
-  
+
   // Public folders actions
   fetchPublicFolders: (resetFilters?: boolean) => Promise<void>;
   loadMorePublicFolders: () => Promise<void>;
@@ -79,7 +79,7 @@ const useFolderStore = create<FolderState>((set, get) => ({
   deleteLoading: false,
   generateLoading: false,
   savingLoading: false,
-  
+
   // Public folders state
   publicFolders: [],
   publicPagination: null,
@@ -99,11 +99,11 @@ const useFolderStore = create<FolderState>((set, get) => ({
   fetchFolders: async (resetFilters = false) => {
     const { filters } = get();
     const currentFilters = resetFilters ? {} : filters;
-    
+
     if (resetFilters) {
       set({ filters: {} });
     }
-    
+
     set({ loading: true });
     try {
       const params: Record<string, any> = {
@@ -113,11 +113,11 @@ const useFolderStore = create<FolderState>((set, get) => ({
         ...(currentFilters.sortBy && { sort_by: currentFilters.sortBy }),
         ...(currentFilters.sortOrder && { sort_order: currentFilters.sortOrder }),
       };
-      
+
       const response = await api.get('/folders', { params });
       const folders = z.array(folderResponseSchema).parse(response.data.data);
       const pagination = response.data.pagination as Pagination;
-      
+
       set({ folders, pagination });
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -135,9 +135,9 @@ const useFolderStore = create<FolderState>((set, get) => ({
   // Load more folders (infinite scroll)
   loadMoreFolders: async () => {
     const { pagination, folders, filters, loadingMore } = get();
-    
+
     if (!pagination || !pagination.hasMore || loadingMore) return;
-    
+
     set({ loadingMore: true });
     try {
       const params: Record<string, any> = {
@@ -147,14 +147,14 @@ const useFolderStore = create<FolderState>((set, get) => ({
         ...(filters.sortBy && { sort_by: filters.sortBy }),
         ...(filters.sortOrder && { sort_order: filters.sortOrder }),
       };
-      
+
       const response = await api.get('/folders', { params });
       const newFolders = z.array(folderResponseSchema).parse(response.data.data);
       const newPagination = response.data.pagination as Pagination;
-      
-      set({ 
-        folders: [...folders, ...newFolders], 
-        pagination: newPagination 
+
+      set({
+        folders: [...folders, ...newFolders],
+        pagination: newPagination
       });
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -176,7 +176,7 @@ const useFolderStore = create<FolderState>((set, get) => ({
       // Parse with flashcards if included
       const folder = folderWithFlashcardsSchema.parse(response.data);
       set({ currentFolder: folder });
-      
+
       // Update in folders list if exists
       const folders = get().folders;
       const index = folders.findIndex(f => f.id === id);
@@ -204,11 +204,11 @@ const useFolderStore = create<FolderState>((set, get) => ({
       const validatedRequest = folderRequestSchema.parse(folderRequest);
       const response = await api.post('/folders', validatedRequest);
       const folder = folderResponseSchema.parse(response.data);
-      
+
       set((state) => ({
         folders: [folder, ...state.folders]
       }));
-      
+
       toast.success('Tạo folder thành công!');
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -231,12 +231,12 @@ const useFolderStore = create<FolderState>((set, get) => ({
       const validatedRequest = folderRequestSchema.parse(folderRequest);
       const response = await api.patch(`/folders/${id}`, validatedRequest);
       const folder = folderResponseSchema.parse(response.data);
-      
+
       set((state) => ({
         folders: state.folders.map(f => f.id === id ? folder : f),
         currentFolder: state.currentFolder?.id === id ? folder : state.currentFolder
       }));
-      
+
       toast.success('Cập nhật folder thành công!');
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -257,12 +257,12 @@ const useFolderStore = create<FolderState>((set, get) => ({
     set({ deleteLoading: true });
     try {
       await api.delete(`/folders/${id}`);
-      
+
       set((state) => ({
         folders: state.folders.filter(f => f.id !== id),
         currentFolder: state.currentFolder?.id === id ? null : state.currentFolder
       }));
-      
+
       toast.success('Xóa folder thành công!');
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -282,11 +282,11 @@ const useFolderStore = create<FolderState>((set, get) => ({
     try {
       const response = await api.post('/folders/generate-ai', { folderName });
       const folder = folderWithFlashcardsSchema.parse(response.data);
-      
+
       set((state) => ({
         folders: [folder, ...state.folders]
       }));
-      
+
       toast.success(`Đã tạo bộ sưu tập "${folder.name}" với ${folder.flashcards?.length || 0} flashcard!`);
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -306,14 +306,14 @@ const useFolderStore = create<FolderState>((set, get) => ({
     try {
       const response = await api.patch(`/folders/${id}/toggle-public`);
       const folder = folderResponseSchema.parse(response.data);
-      
+
       set((state) => ({
         folders: state.folders.map(f => f.id === id ? folder : f),
-        currentFolder: state.currentFolder?.id === id 
+        currentFolder: state.currentFolder?.id === id
           ? { ...state.currentFolder, ...folder }
           : state.currentFolder
       }));
-      
+
       toast.success(folder.isPublic ? 'Đã chia sẻ flashbook thành công!' : 'Đã hủy chia sẻ flashbook!');
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -352,11 +352,11 @@ const useFolderStore = create<FolderState>((set, get) => ({
     try {
       const response = await api.post(`/folders/public/${id}/save`);
       const folder = folderResponseSchema.parse(response.data);
-      
+
       set((state) => ({
         folders: [folder, ...state.folders]
       }));
-      
+
       toast.success('Lưu Flashbook thành công');
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -380,7 +380,7 @@ const useFolderStore = create<FolderState>((set, get) => ({
   removeFlashcardFromCurrentFolder: (flashcardId: string) => {
     set((state) => {
       if (!state.currentFolder) return state;
-      
+
       return {
         currentFolder: {
           ...state.currentFolder,
@@ -405,14 +405,14 @@ const useFolderStore = create<FolderState>((set, get) => ({
   // Fetch public folders
   fetchPublicFolders: async (resetFilters = false) => {
     const { publicFilters } = get();
-    const currentFilters = resetFilters 
+    const currentFilters = resetFilters
       ? { sortBy: 'saves' as const, sortOrder: 'desc' as const }
       : publicFilters;
-    
+
     if (resetFilters) {
       set({ publicFilters: { sortBy: 'saves', sortOrder: 'desc' } });
     }
-    
+
     set({ publicLoading: true });
     try {
       const params: Record<string, any> = {
@@ -422,11 +422,11 @@ const useFolderStore = create<FolderState>((set, get) => ({
         ...(currentFilters.sortBy && { sort_by: currentFilters.sortBy }),
         ...(currentFilters.sortOrder && { sort_order: currentFilters.sortOrder }),
       };
-      
+
       const response = await api.get('/folders/public/explore', { params });
       const folders = z.array(folderResponseSchema).parse(response.data.data);
       const pagination = response.data.pagination as Pagination;
-      
+
       set({ publicFolders: folders, publicPagination: pagination });
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -444,9 +444,9 @@ const useFolderStore = create<FolderState>((set, get) => ({
   // Load more public folders (infinite scroll)
   loadMorePublicFolders: async () => {
     const { publicPagination, publicFolders, publicFilters, publicLoadingMore } = get();
-    
+
     if (!publicPagination || !publicPagination.hasMore || publicLoadingMore) return;
-    
+
     set({ publicLoadingMore: true });
     try {
       const params: Record<string, any> = {
@@ -456,14 +456,14 @@ const useFolderStore = create<FolderState>((set, get) => ({
         ...(publicFilters.sortBy && { sort_by: publicFilters.sortBy }),
         ...(publicFilters.sortOrder && { sort_order: publicFilters.sortOrder }),
       };
-      
+
       const response = await api.get('/folders/public/explore', { params });
       const newFolders = z.array(folderResponseSchema).parse(response.data.data);
       const newPagination = response.data.pagination as Pagination;
-      
-      set({ 
-        publicFolders: [...publicFolders, ...newFolders], 
-        publicPagination: newPagination 
+
+      set({
+        publicFolders: [...publicFolders, ...newFolders],
+        publicPagination: newPagination
       });
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -479,8 +479,8 @@ const useFolderStore = create<FolderState>((set, get) => ({
 
   // Clear public folders
   clearPublicFolders: () => {
-    set({ 
-      publicFolders: [], 
+    set({
+      publicFolders: [],
       publicPagination: null,
       publicFilters: { sortBy: 'saves', sortOrder: 'desc' }
     });

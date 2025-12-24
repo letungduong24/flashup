@@ -22,6 +22,7 @@ model User {
   folders     Folder[]
   studyCounts StudyCount[]
   attendances Attendance[]
+  practiceSessions PracticeSession[]
 }
 
 model Folder {
@@ -31,10 +32,12 @@ model Folder {
   user_id     String
   isPublic    Boolean     @default(false)
   saves       Int         @default(0)
+  version     Int         @default(1) // Version of the folder, incremented on updates
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   flashcards  Flashcard[]
   user        User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  practiceSessions PracticeSession[]
 
   @@index([user_id])
   @@index([isPublic])
@@ -57,6 +60,7 @@ model Flashcard {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   folder        Folder?  @relation(fields: [folder_id], references: [id])
+  practiceSessionQuestions PracticeSessionQuestion[]
 
   @@index([folder_id])
   @@index([status])
@@ -89,4 +93,62 @@ model Attendance {
   @@unique([user_id, date], name: "user_id_date")
   @@index([user_id])
   @@index([date])
+}
+
+model PracticeSession {
+  id             String    @id @default(cuid())
+  userId         String
+  folderId       String
+  folderVersion  Int       @default(1) // Snapshot of folder version
+  mode           String    @default("fill-in-the-blank") // "fill-in-the-blank", "multiple-choice", "sentence"
+  status         String    @default("IN_PROGRESS") // "IN_PROGRESS", "COMPLETED"
+  currentIndex   Int       @default(0)
+  correctCount   Int       @default(0)
+  incorrectCount Int       @default(0)
+  summary        String?   @db.Text
+  startTime      DateTime  @default(now())
+  endTime        DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  user      User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folder    Folder                    @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  questions PracticeSessionQuestion[]
+  answers   PracticeSessionAnswer[]
+
+  @@index([userId])
+  @@index([folderId])
+}
+
+model PracticeSessionQuestion {
+  id          String @id @default(cuid())
+  sessionId   String
+  flashcardId String
+  question    String
+  answer      String
+  options     Json? // Array of strings for multiple choice
+  order       Int // Order in the session
+
+  session   PracticeSession       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  flashcard Flashcard             @relation(fields: [flashcardId], references: [id], onDelete: Cascade)
+  answers   PracticeSessionAnswer[]
+
+  @@index([sessionId])
+  @@index([flashcardId])
+}
+
+model PracticeSessionAnswer {
+  id         String   @id @default(cuid())
+  sessionId  String
+  questionId String
+  userAnswer String
+  isCorrect  Boolean
+  evaluation Json? // Store simplified evaluation or full Gemini response
+  answeredAt DateTime @default(now())
+
+  session  PracticeSession         @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  question PracticeSessionQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([questionId])
 }

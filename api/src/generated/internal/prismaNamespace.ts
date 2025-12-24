@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.0.0
- * Query Engine version: 0c19ccc313cf9911a90d99d2ac2eb0280c76c513
+ * Prisma Client JS version: 7.2.0
+ * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.0.0",
-  engine: "0c19ccc313cf9911a90d99d2ac2eb0280c76c513"
+  client: "7.2.0",
+  engine: "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3"
 }
 
 /**
@@ -388,7 +388,10 @@ export const ModelName = {
   Folder: 'Folder',
   Flashcard: 'Flashcard',
   StudyCount: 'StudyCount',
-  Attendance: 'Attendance'
+  Attendance: 'Attendance',
+  PracticeSession: 'PracticeSession',
+  PracticeSessionQuestion: 'PracticeSessionQuestion',
+  PracticeSessionAnswer: 'PracticeSessionAnswer'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "folder" | "flashcard" | "studyCount" | "attendance"
+    modelProps: "user" | "folder" | "flashcard" | "studyCount" | "attendance" | "practiceSession" | "practiceSessionQuestion" | "practiceSessionAnswer"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +781,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PracticeSession: {
+      payload: Prisma.$PracticeSessionPayload<ExtArgs>
+      fields: Prisma.PracticeSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PracticeSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PracticeSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.PracticeSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PracticeSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        findMany: {
+          args: Prisma.PracticeSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>[]
+        }
+        create: {
+          args: Prisma.PracticeSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        createMany: {
+          args: Prisma.PracticeSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PracticeSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.PracticeSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        update: {
+          args: Prisma.PracticeSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PracticeSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PracticeSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PracticeSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PracticeSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.PracticeSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePracticeSession>
+        }
+        groupBy: {
+          args: Prisma.PracticeSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PracticeSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PracticeSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PracticeSessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    PracticeSessionQuestion: {
+      payload: Prisma.$PracticeSessionQuestionPayload<ExtArgs>
+      fields: Prisma.PracticeSessionQuestionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PracticeSessionQuestionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PracticeSessionQuestionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload>
+        }
+        findFirst: {
+          args: Prisma.PracticeSessionQuestionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PracticeSessionQuestionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload>
+        }
+        findMany: {
+          args: Prisma.PracticeSessionQuestionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload>[]
+        }
+        create: {
+          args: Prisma.PracticeSessionQuestionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload>
+        }
+        createMany: {
+          args: Prisma.PracticeSessionQuestionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PracticeSessionQuestionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload>[]
+        }
+        delete: {
+          args: Prisma.PracticeSessionQuestionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload>
+        }
+        update: {
+          args: Prisma.PracticeSessionQuestionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PracticeSessionQuestionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PracticeSessionQuestionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PracticeSessionQuestionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PracticeSessionQuestionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionQuestionPayload>
+        }
+        aggregate: {
+          args: Prisma.PracticeSessionQuestionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePracticeSessionQuestion>
+        }
+        groupBy: {
+          args: Prisma.PracticeSessionQuestionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PracticeSessionQuestionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PracticeSessionQuestionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PracticeSessionQuestionCountAggregateOutputType> | number
+        }
+      }
+    }
+    PracticeSessionAnswer: {
+      payload: Prisma.$PracticeSessionAnswerPayload<ExtArgs>
+      fields: Prisma.PracticeSessionAnswerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PracticeSessionAnswerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PracticeSessionAnswerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload>
+        }
+        findFirst: {
+          args: Prisma.PracticeSessionAnswerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PracticeSessionAnswerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload>
+        }
+        findMany: {
+          args: Prisma.PracticeSessionAnswerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload>[]
+        }
+        create: {
+          args: Prisma.PracticeSessionAnswerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload>
+        }
+        createMany: {
+          args: Prisma.PracticeSessionAnswerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PracticeSessionAnswerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload>[]
+        }
+        delete: {
+          args: Prisma.PracticeSessionAnswerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload>
+        }
+        update: {
+          args: Prisma.PracticeSessionAnswerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload>
+        }
+        deleteMany: {
+          args: Prisma.PracticeSessionAnswerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PracticeSessionAnswerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PracticeSessionAnswerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload>[]
+        }
+        upsert: {
+          args: Prisma.PracticeSessionAnswerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PracticeSessionAnswerPayload>
+        }
+        aggregate: {
+          args: Prisma.PracticeSessionAnswerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePracticeSessionAnswer>
+        }
+        groupBy: {
+          args: Prisma.PracticeSessionAnswerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PracticeSessionAnswerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PracticeSessionAnswerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PracticeSessionAnswerCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -840,6 +1065,7 @@ export const FolderScalarFieldEnum = {
   user_id: 'user_id',
   isPublic: 'isPublic',
   saves: 'saves',
+  version: 'version',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -890,6 +1116,52 @@ export const AttendanceScalarFieldEnum = {
 } as const
 
 export type AttendanceScalarFieldEnum = (typeof AttendanceScalarFieldEnum)[keyof typeof AttendanceScalarFieldEnum]
+
+
+export const PracticeSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  folderId: 'folderId',
+  folderVersion: 'folderVersion',
+  mode: 'mode',
+  status: 'status',
+  currentIndex: 'currentIndex',
+  correctCount: 'correctCount',
+  incorrectCount: 'incorrectCount',
+  summary: 'summary',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PracticeSessionScalarFieldEnum = (typeof PracticeSessionScalarFieldEnum)[keyof typeof PracticeSessionScalarFieldEnum]
+
+
+export const PracticeSessionQuestionScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  flashcardId: 'flashcardId',
+  question: 'question',
+  answer: 'answer',
+  options: 'options',
+  order: 'order'
+} as const
+
+export type PracticeSessionQuestionScalarFieldEnum = (typeof PracticeSessionQuestionScalarFieldEnum)[keyof typeof PracticeSessionQuestionScalarFieldEnum]
+
+
+export const PracticeSessionAnswerScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  questionId: 'questionId',
+  userAnswer: 'userAnswer',
+  isCorrect: 'isCorrect',
+  evaluation: 'evaluation',
+  answeredAt: 'answeredAt'
+} as const
+
+export type PracticeSessionAnswerScalarFieldEnum = (typeof PracticeSessionAnswerScalarFieldEnum)[keyof typeof PracticeSessionAnswerScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1064,7 +1336,7 @@ export type PrismaClientOptions = ({
    *  { emit: 'stdout', level: 'error' }
    * 
    * ```
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
+   * Read more in our [docs](https://pris.ly/d/logging).
    */
   log?: (LogLevel | LogDefinition)[]
   /**
@@ -1092,6 +1364,22 @@ export type PrismaClientOptions = ({
    * ```
    */
   omit?: GlobalOmitConfig
+  /**
+   * SQL commenter plugins that add metadata to SQL queries as comments.
+   * Comments follow the sqlcommenter format: https://google.github.io/sqlcommenter/
+   * 
+   * @example
+   * ```
+   * const prisma = new PrismaClient({
+   *   adapter,
+   *   comments: [
+   *     traceContext(),
+   *     queryInsights(),
+   *   ],
+   * })
+   * ```
+   */
+  comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
@@ -1099,6 +1387,9 @@ export type GlobalOmitConfig = {
   flashcard?: Prisma.FlashcardOmit
   studyCount?: Prisma.StudyCountOmit
   attendance?: Prisma.AttendanceOmit
+  practiceSession?: Prisma.PracticeSessionOmit
+  practiceSessionQuestion?: Prisma.PracticeSessionQuestionOmit
+  practiceSessionAnswer?: Prisma.PracticeSessionAnswerOmit
 }
 
 /* Types for Logging */

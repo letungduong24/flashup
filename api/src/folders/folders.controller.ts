@@ -1,10 +1,10 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
-  Patch, 
-  Param, 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
   Delete,
   Request,
   UseGuards,
@@ -20,7 +20,7 @@ import { FolderRequestDto } from './dto/folder-request.dto';
 @Controller('folders')
 @UseGuards(JwtAuthGuard)
 export class FoldersController {
-  constructor(private readonly foldersService: FoldersService) {}
+  constructor(private readonly foldersService: FoldersService) { }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

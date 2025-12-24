@@ -23,7 +23,6 @@ export default function Home() {
       <Hero />
       <FlashcardDemo />
       <CourseIntroduce />
-      <TestIntroduce />
       <Footer2 />
     </div>
   );

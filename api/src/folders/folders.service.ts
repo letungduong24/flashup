@@ -10,7 +10,7 @@ export class FoldersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly geminiService: GeminiService,
-  ) {}
+  ) { }
 
   async create(userId: string, folderRequest: FolderRequestDto) {
     const folder = await this.prisma.folder.create({
@@ -165,7 +165,10 @@ export class FoldersService {
 
     const updatedFolder = await this.prisma.folder.update({
       where: { id },
-      data: folderRequest,
+      data: {
+        ...folderRequest,
+        version: { increment: 1 },
+      },
     });
 
     // Calculate statistics

@@ -38,7 +38,7 @@ const FlashcardDemo = () => {
   return (
     <div className="z-20 flex justify-center flex-col items-center gap-3">
       <h1 className='text-center text-2xl font-bold z-30'>Học từ vựng với Flashcard</h1>
-      <div className="space-y-3 w-full">
+      <div className="space-y-3 w-full max-w-6xl">
           <FlashCard flashcard={flashcardData} isMock={true}/>
         </div>
     </div>

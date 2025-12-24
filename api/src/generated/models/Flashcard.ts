@@ -301,6 +301,7 @@ export type FlashcardWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Flashcard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Flashcard"> | Date | string
   folder?: Prisma.XOR<Prisma.FolderNullableScalarRelationFilter, Prisma.FolderWhereInput> | null
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionListRelationFilter
 }
 
 export type FlashcardOrderByWithRelationInput = {
@@ -320,6 +321,7 @@ export type FlashcardOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   folder?: Prisma.FolderOrderByWithRelationInput
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionOrderByRelationAggregateInput
 }
 
 export type FlashcardWhereUniqueInput = Prisma.AtLeast<{
@@ -342,6 +344,7 @@ export type FlashcardWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Flashcard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Flashcard"> | Date | string
   folder?: Prisma.XOR<Prisma.FolderNullableScalarRelationFilter, Prisma.FolderWhereInput> | null
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionListRelationFilter
 }, "id">
 
 export type FlashcardOrderByWithAggregationInput = {
@@ -404,6 +407,7 @@ export type FlashcardCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   folder?: Prisma.FolderCreateNestedOneWithoutFlashcardsInput
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionCreateNestedManyWithoutFlashcardInput
 }
 
 export type FlashcardUncheckedCreateInput = {
@@ -422,6 +426,7 @@ export type FlashcardUncheckedCreateInput = {
   tags?: Prisma.FlashcardCreatetagsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionUncheckedCreateNestedManyWithoutFlashcardInput
 }
 
 export type FlashcardUpdateInput = {
@@ -440,6 +445,7 @@ export type FlashcardUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   folder?: Prisma.FolderUpdateOneWithoutFlashcardsNestedInput
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionUpdateManyWithoutFlashcardNestedInput
 }
 
 export type FlashcardUncheckedUpdateInput = {
@@ -458,6 +464,7 @@ export type FlashcardUncheckedUpdateInput = {
   tags?: Prisma.FlashcardUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionUncheckedUpdateManyWithoutFlashcardNestedInput
 }
 
 export type FlashcardCreateManyInput = {
@@ -595,6 +602,11 @@ export type FlashcardSumOrderByAggregateInput = {
   lapseCount?: Prisma.SortOrder
 }
 
+export type FlashcardScalarRelationFilter = {
+  is?: Prisma.FlashcardWhereInput
+  isNot?: Prisma.FlashcardWhereInput
+}
+
 export type FlashcardCreateNestedManyWithoutFolderInput = {
   create?: Prisma.XOR<Prisma.FlashcardCreateWithoutFolderInput, Prisma.FlashcardUncheckedCreateWithoutFolderInput> | Prisma.FlashcardCreateWithoutFolderInput[] | Prisma.FlashcardUncheckedCreateWithoutFolderInput[]
   connectOrCreate?: Prisma.FlashcardCreateOrConnectWithoutFolderInput | Prisma.FlashcardCreateOrConnectWithoutFolderInput[]
@@ -658,6 +670,20 @@ export type FlashcardUpdatetagsInput = {
   push?: string | string[]
 }
 
+export type FlashcardCreateNestedOneWithoutPracticeSessionQuestionsInput = {
+  create?: Prisma.XOR<Prisma.FlashcardCreateWithoutPracticeSessionQuestionsInput, Prisma.FlashcardUncheckedCreateWithoutPracticeSessionQuestionsInput>
+  connectOrCreate?: Prisma.FlashcardCreateOrConnectWithoutPracticeSessionQuestionsInput
+  connect?: Prisma.FlashcardWhereUniqueInput
+}
+
+export type FlashcardUpdateOneRequiredWithoutPracticeSessionQuestionsNestedInput = {
+  create?: Prisma.XOR<Prisma.FlashcardCreateWithoutPracticeSessionQuestionsInput, Prisma.FlashcardUncheckedCreateWithoutPracticeSessionQuestionsInput>
+  connectOrCreate?: Prisma.FlashcardCreateOrConnectWithoutPracticeSessionQuestionsInput
+  upsert?: Prisma.FlashcardUpsertWithoutPracticeSessionQuestionsInput
+  connect?: Prisma.FlashcardWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FlashcardUpdateToOneWithWhereWithoutPracticeSessionQuestionsInput, Prisma.FlashcardUpdateWithoutPracticeSessionQuestionsInput>, Prisma.FlashcardUncheckedUpdateWithoutPracticeSessionQuestionsInput>
+}
+
 export type FlashcardCreateWithoutFolderInput = {
   id?: string
   name: string
@@ -673,6 +699,7 @@ export type FlashcardCreateWithoutFolderInput = {
   tags?: Prisma.FlashcardCreatetagsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionCreateNestedManyWithoutFlashcardInput
 }
 
 export type FlashcardUncheckedCreateWithoutFolderInput = {
@@ -690,6 +717,7 @@ export type FlashcardUncheckedCreateWithoutFolderInput = {
   tags?: Prisma.FlashcardCreatetagsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionUncheckedCreateNestedManyWithoutFlashcardInput
 }
 
 export type FlashcardCreateOrConnectWithoutFolderInput = {
@@ -739,6 +767,94 @@ export type FlashcardScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Flashcard"> | Date | string
 }
 
+export type FlashcardCreateWithoutPracticeSessionQuestionsInput = {
+  id?: string
+  name: string
+  meaning: string
+  review_count?: number
+  audio_url?: string | null
+  usage?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  status?: string
+  interval?: number
+  nextReview?: Date | string | null
+  easeFactor?: number
+  lapseCount?: number
+  tags?: Prisma.FlashcardCreatetagsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  folder?: Prisma.FolderCreateNestedOneWithoutFlashcardsInput
+}
+
+export type FlashcardUncheckedCreateWithoutPracticeSessionQuestionsInput = {
+  id?: string
+  name: string
+  meaning: string
+  folder_id?: string | null
+  review_count?: number
+  audio_url?: string | null
+  usage?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  status?: string
+  interval?: number
+  nextReview?: Date | string | null
+  easeFactor?: number
+  lapseCount?: number
+  tags?: Prisma.FlashcardCreatetagsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FlashcardCreateOrConnectWithoutPracticeSessionQuestionsInput = {
+  where: Prisma.FlashcardWhereUniqueInput
+  create: Prisma.XOR<Prisma.FlashcardCreateWithoutPracticeSessionQuestionsInput, Prisma.FlashcardUncheckedCreateWithoutPracticeSessionQuestionsInput>
+}
+
+export type FlashcardUpsertWithoutPracticeSessionQuestionsInput = {
+  update: Prisma.XOR<Prisma.FlashcardUpdateWithoutPracticeSessionQuestionsInput, Prisma.FlashcardUncheckedUpdateWithoutPracticeSessionQuestionsInput>
+  create: Prisma.XOR<Prisma.FlashcardCreateWithoutPracticeSessionQuestionsInput, Prisma.FlashcardUncheckedCreateWithoutPracticeSessionQuestionsInput>
+  where?: Prisma.FlashcardWhereInput
+}
+
+export type FlashcardUpdateToOneWithWhereWithoutPracticeSessionQuestionsInput = {
+  where?: Prisma.FlashcardWhereInput
+  data: Prisma.XOR<Prisma.FlashcardUpdateWithoutPracticeSessionQuestionsInput, Prisma.FlashcardUncheckedUpdateWithoutPracticeSessionQuestionsInput>
+}
+
+export type FlashcardUpdateWithoutPracticeSessionQuestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  meaning?: Prisma.StringFieldUpdateOperationsInput | string
+  review_count?: Prisma.IntFieldUpdateOperationsInput | number
+  audio_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usage?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  interval?: Prisma.FloatFieldUpdateOperationsInput | number
+  nextReview?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  easeFactor?: Prisma.FloatFieldUpdateOperationsInput | number
+  lapseCount?: Prisma.IntFieldUpdateOperationsInput | number
+  tags?: Prisma.FlashcardUpdatetagsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  folder?: Prisma.FolderUpdateOneWithoutFlashcardsNestedInput
+}
+
+export type FlashcardUncheckedUpdateWithoutPracticeSessionQuestionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  meaning?: Prisma.StringFieldUpdateOperationsInput | string
+  folder_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  review_count?: Prisma.IntFieldUpdateOperationsInput | number
+  audio_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  usage?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  interval?: Prisma.FloatFieldUpdateOperationsInput | number
+  nextReview?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  easeFactor?: Prisma.FloatFieldUpdateOperationsInput | number
+  lapseCount?: Prisma.IntFieldUpdateOperationsInput | number
+  tags?: Prisma.FlashcardUpdatetagsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type FlashcardCreateManyFolderInput = {
   id?: string
   name: string
@@ -771,6 +887,7 @@ export type FlashcardUpdateWithoutFolderInput = {
   tags?: Prisma.FlashcardUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionUpdateManyWithoutFlashcardNestedInput
 }
 
 export type FlashcardUncheckedUpdateWithoutFolderInput = {
@@ -788,6 +905,7 @@ export type FlashcardUncheckedUpdateWithoutFolderInput = {
   tags?: Prisma.FlashcardUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  practiceSessionQuestions?: Prisma.PracticeSessionQuestionUncheckedUpdateManyWithoutFlashcardNestedInput
 }
 
 export type FlashcardUncheckedUpdateManyWithoutFolderInput = {
@@ -808,6 +926,35 @@ export type FlashcardUncheckedUpdateManyWithoutFolderInput = {
 }
 
 
+/**
+ * Count Type FlashcardCountOutputType
+ */
+
+export type FlashcardCountOutputType = {
+  practiceSessionQuestions: number
+}
+
+export type FlashcardCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  practiceSessionQuestions?: boolean | FlashcardCountOutputTypeCountPracticeSessionQuestionsArgs
+}
+
+/**
+ * FlashcardCountOutputType without action
+ */
+export type FlashcardCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FlashcardCountOutputType
+   */
+  select?: Prisma.FlashcardCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * FlashcardCountOutputType without action
+ */
+export type FlashcardCountOutputTypeCountPracticeSessionQuestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PracticeSessionQuestionWhereInput
+}
+
 
 export type FlashcardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -826,6 +973,8 @@ export type FlashcardSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   createdAt?: boolean
   updatedAt?: boolean
   folder?: boolean | Prisma.Flashcard$folderArgs<ExtArgs>
+  practiceSessionQuestions?: boolean | Prisma.Flashcard$practiceSessionQuestionsArgs<ExtArgs>
+  _count?: boolean | Prisma.FlashcardCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["flashcard"]>
 
 export type FlashcardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -887,6 +1036,8 @@ export type FlashcardSelectScalar = {
 export type FlashcardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "meaning" | "folder_id" | "review_count" | "audio_url" | "usage" | "status" | "interval" | "nextReview" | "easeFactor" | "lapseCount" | "tags" | "createdAt" | "updatedAt", ExtArgs["result"]["flashcard"]>
 export type FlashcardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   folder?: boolean | Prisma.Flashcard$folderArgs<ExtArgs>
+  practiceSessionQuestions?: boolean | Prisma.Flashcard$practiceSessionQuestionsArgs<ExtArgs>
+  _count?: boolean | Prisma.FlashcardCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FlashcardIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   folder?: boolean | Prisma.Flashcard$folderArgs<ExtArgs>
@@ -899,6 +1050,7 @@ export type $FlashcardPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   name: "Flashcard"
   objects: {
     folder: Prisma.$FolderPayload<ExtArgs> | null
+    practiceSessionQuestions: Prisma.$PracticeSessionQuestionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1311,6 +1463,7 @@ readonly fields: FlashcardFieldRefs;
 export interface Prisma__FlashcardClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   folder<T extends Prisma.Flashcard$folderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Flashcard$folderArgs<ExtArgs>>): Prisma.Prisma__FolderClient<runtime.Types.Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  practiceSessionQuestions<T extends Prisma.Flashcard$practiceSessionQuestionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Flashcard$practiceSessionQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PracticeSessionQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1767,6 +1920,30 @@ export type Flashcard$folderArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   include?: Prisma.FolderInclude<ExtArgs> | null
   where?: Prisma.FolderWhereInput
+}
+
+/**
+ * Flashcard.practiceSessionQuestions
+ */
+export type Flashcard$practiceSessionQuestionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PracticeSessionQuestion
+   */
+  select?: Prisma.PracticeSessionQuestionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PracticeSessionQuestion
+   */
+  omit?: Prisma.PracticeSessionQuestionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PracticeSessionQuestionInclude<ExtArgs> | null
+  where?: Prisma.PracticeSessionQuestionWhereInput
+  orderBy?: Prisma.PracticeSessionQuestionOrderByWithRelationInput | Prisma.PracticeSessionQuestionOrderByWithRelationInput[]
+  cursor?: Prisma.PracticeSessionQuestionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PracticeSessionQuestionScalarFieldEnum | Prisma.PracticeSessionQuestionScalarFieldEnum[]
 }
 
 /**

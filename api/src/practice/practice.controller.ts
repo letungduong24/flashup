@@ -10,7 +10,7 @@ import {
 import { PracticeService } from './practice.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Request } from 'express';
-import { 
+import {
   PracticeSession,
   CreateSessionResponse,
   SubmitAnswerResponse,
@@ -27,7 +27,7 @@ interface AuthenticatedRequest extends Request {
 @Controller('practice')
 @UseGuards(JwtAuthGuard)
 export class PracticeController {
-  constructor(private readonly practiceService: PracticeService) {}
+  constructor(private readonly practiceService: PracticeService) { }
 
   /**
    * Create a new practice session
@@ -76,6 +76,21 @@ export class PracticeController {
   }
 
   /**
+   * Submit a sentence for evaluation
+   * POST /practice/sessions/:sessionId/evaluate-sentence
+   * Body: { sentence: string }
+   */
+  @Post('sessions/:sessionId/evaluate-sentence')
+  async evaluateSentence(
+    @Req() req: AuthenticatedRequest,
+    @Param('sessionId') sessionId: string,
+    @Body('sentence') sentence: string,
+  ): Promise<any> {
+    const userId = req.user.id;
+    return this.practiceService.submitSentence(sessionId, userId, sentence);
+  }
+
+  /**
    * Finish a practice session
    * POST /practice/sessions/:sessionId/finish
    * Returns: { correctCount, incorrectCount, totalCount, duration, accuracy }
@@ -87,6 +102,19 @@ export class PracticeController {
   ): Promise<FinishSessionResponse> {
     const userId = req.user.id;
     return this.practiceService.finishSession(sessionId, userId);
+  }
+
+  /**
+   * Generate session summary
+   * POST /practice/sessions/:sessionId/summary
+   */
+  @Post('sessions/:sessionId/summary')
+  async getSessionSummary(
+    @Req() req: AuthenticatedRequest,
+    @Param('sessionId') sessionId: string,
+  ): Promise<{ summary: string }> {
+    const userId = req.user.id;
+    return this.practiceService.generateSessionSummary(sessionId, userId);
   }
 }
 

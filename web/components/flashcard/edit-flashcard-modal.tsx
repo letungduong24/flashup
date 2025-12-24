@@ -105,8 +105,8 @@ const EditFlashcardModal: React.FC<EditFlashcardModalProps> = ({
       setAudioCheck({ checking: true, hasAudio: null, wordExists: null });
       try {
         const response = await api.get(`/flashcards/check-audio/${encodeURIComponent(wordValue.trim())}`);
-        setAudioCheck({ 
-          checking: false, 
+        setAudioCheck({
+          checking: false,
           hasAudio: response.data.hasAudio,
           wordExists: response.data.wordExists,
         });
@@ -120,7 +120,7 @@ const EditFlashcardModal: React.FC<EditFlashcardModalProps> = ({
 
   const onSubmit = async (data: FlashcardRequest) => {
     if (!flashcard) return;
-    
+
     try {
       // Nếu từ thay đổi và có audio mới, lấy audioUrl từ API check
       let audioUrl: string | undefined = undefined;
@@ -134,7 +134,7 @@ const EditFlashcardModal: React.FC<EditFlashcardModalProps> = ({
           console.error('Error fetching audio URL:', error);
         }
       }
-      
+
       await updateFlashcard(flashcard.id, {
         ...data,
         tags: tags,
@@ -212,11 +212,11 @@ const EditFlashcardModal: React.FC<EditFlashcardModalProps> = ({
                   </div>
                   {wordValue && wordValue.trim().length >= 2 && audioCheck.hasAudio !== null && (
                     <p className={`text-xs ${audioCheck.hasAudio ? 'text-green-600' : 'text-muted-foreground'}`}>
-                      {audioCheck.hasAudio 
-                        ? 'Có thể lấy audio từ Cambridge Dictionary' 
+                      {audioCheck.hasAudio
+                        ? 'Có thể lấy audio từ Cambridge Dictionary'
                         : audioCheck.wordExists === false
-                        ? 'Từ không tồn tại trong Cambridge Dictionary'
-                        : 'Không có audio cho từ này'}
+                          ? 'Từ không tồn tại trong Cambridge Dictionary'
+                          : 'Không có audio cho từ này'}
                     </p>
                   )}
                   {errors.name && (

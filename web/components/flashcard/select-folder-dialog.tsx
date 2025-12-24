@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -9,7 +9,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Loader2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { BookOpen, Loader2, Search, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import useFolderStore from '@/store/folder.store';
 import { FolderResponse } from '@/types/folder';
@@ -18,8 +19,8 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { BsFolder } from 'react-icons/bs';
 import { PiStarFour } from 'react-icons/pi';
 import { FaPlus } from 'react-icons/fa';
-import CreateFolderModal from '@/components/flashcard/create-folder-modal';
-import AIAssistantModal from '@/components/flashcard/ai-assistant-modal';
+import CreateFlashbookModal from '@/components/flashcard/create-flashbook-modal';
+import { useDebounce, useInfiniteScroll } from '@/hooks';
 
 interface SelectFolderDialogProps {
   open: boolean;
@@ -32,20 +33,45 @@ export default function SelectFolderDialog({
   onOpenChange,
   onSelect,
 }: SelectFolderDialogProps) {
-  const { folders, loading, fetchFolders } = useFolderStore();
+  const { folders, pagination, filters, loading, loadingMore, fetchFolders, loadMoreFolders, setFilters } = useFolderStore();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+  const [defaultTab, setDefaultTab] = useState<'ai' | 'manual'>('ai');
+  const [searchInput, setSearchInput] = useState('');
+
+  const debouncedSearch = useDebounce(searchInput, 500);
+
+  // Infinite scroll
+  const loadMoreRef = useInfiniteScroll({
+    onLoadMore: () => loadMoreFolders(),
+    hasMore: pagination?.hasMore ?? false,
+    isLoading: loadingMore,
+  });
 
   useEffect(() => {
     if (open) {
-      fetchFolders(true);
+      setSearchInput('');
+      setFilters({ search: undefined });
+      fetchFolders(false); // Don't reset filters, just fetch with current (empty) filters
     }
   }, [open]);
+
+  // Apply debounced search
+  useEffect(() => {
+    if (!open) return;
+
+    setFilters({ search: debouncedSearch || undefined });
+    fetchFolders(false);
+  }, [debouncedSearch]);
+
+  const hasFlashcards = (folder: FolderResponse) => {
+    const total = (folder.newCount ?? 0) + (folder.reviewCount ?? 0);
+    return total > 0;
+  };
 
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-md max-h-[85vh] overflow-hidden flex flex-col">
+        <DialogContent className="sm:max-w-md max-h-[85vh] overflow-hidden flex flex-col" showCloseButton={false}>
           <DialogHeader>
             <DialogTitle>Chọn Flashbook để luyện tập</DialogTitle>
             <DialogDescription>
@@ -53,93 +79,124 @@ export default function SelectFolderDialog({
             </DialogDescription>
           </DialogHeader>
 
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Tìm kiếm flashbook..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="pl-9 pr-9"
+            />
+            {searchInput && (
+              <button
+                onClick={() => setSearchInput('')}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
           <div className="flex-1 overflow-y-auto py-4">
             {loading ? (
               <div className="space-y-2">
-                {[1, 2, 3].map((i) => (
-                  <Skeleton key={i} className="h-16 w-full" />
+                {[...Array(3)].map((_, i) => (
+                  <Skeleton key={i} className="h-20 w-full" />
                 ))}
               </div>
             ) : folders.length === 0 ? (
               <Empty>
                 <EmptyHeader>
-                  <EmptyMedia variant="icon">
-                    <BsFolder className="h-6 w-6" />
+                  <EmptyMedia>
+                    <BsFolder className="h-12 w-12 text-muted-foreground" />
                   </EmptyMedia>
                   <EmptyTitle>Chưa có Flashbook nào</EmptyTitle>
                   <EmptyDescription>
-                    Bắt đầu tạo Flashbook đầu tiên của bạn để bắt đầu học từ vựng
+                    {searchInput ? 'Không tìm thấy flashbook nào' : 'Tạo flashbook đầu tiên của bạn để bắt đầu'}
                   </EmptyDescription>
                 </EmptyHeader>
-                <EmptyContent>
-                  <div className="flex flex-col sm:flex-row gap-3 w-full">
-                    <Button
-                      onClick={() => {
-                        setIsCreateModalOpen(true);
-                      }}
-                      className="flex-1"
-                    >
-                      <FaPlus className="mr-2 h-4 w-4" />
-                      Tạo thủ công
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setIsAIModalOpen(true);
-                      }}
-                      variant="outline"
-                      className="flex-1"
-                    >
-                      <PiStarFour className="mr-2 h-4 w-4" />
-                      Trợ lý AI
-                    </Button>
-                  </div>
-                </EmptyContent>
+                {!searchInput && (
+                  <EmptyContent>
+                    <div className="flex flex-col sm:flex-row gap-3 w-full">
+                      <Button
+                        onClick={() => {
+                          setDefaultTab('manual');
+                          setIsCreateModalOpen(true);
+                        }}
+                        className="flex-1"
+                      >
+                        <FaPlus className="mr-2 h-4 w-4" />
+                        Tạo thủ công
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setDefaultTab('ai');
+                          setIsCreateModalOpen(true);
+                        }}
+                        variant="outline"
+                        className="flex-1"
+                      >
+                        <PiStarFour className="mr-2 h-4 w-4" />
+                        Trợ lý AI
+                      </Button>
+                    </div>
+                  </EmptyContent>
+                )}
               </Empty>
             ) : (
               <div className="space-y-2 overflow-hidden p-1">
-                {folders.map((folder) => (
-                  <motion.div
-                    key={folder.id}
-                    whileHover={{ y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  >
-                    <Button
-                      variant="outline"
-                      className="w-full h-auto p-4 flex items-center gap-3 hover:bg-accent text-left justify-start"
-                      onClick={() => {
-                        onSelect(folder.id);
-                        onOpenChange(false);
-                      }}
+                {folders.map((folder) => {
+                  const canPractice = hasFlashcards(folder);
+                  return (
+                    <motion.div
+                      key={folder.id}
+                      whileHover={canPractice ? { y: -2 } : {}}
+                      whileTap={canPractice ? { scale: 0.98 } : {}}
+                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
                     >
-                      <div className="flex-1 min-w-0">
-                        <div className="font-semibold truncate">{folder.name}</div>
-                        <div className="text-sm text-muted-foreground font-normal">
-                          {(folder.newCount ?? 0) + (folder.reviewCount ?? 0)} từ vựng
+                      <Button
+                        variant="outline"
+                        className="w-full h-auto p-4 flex items-center gap-3 hover:bg-accent text-left justify-start disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={() => {
+                          if (canPractice) {
+                            onSelect(folder.id);
+                            onOpenChange(false);
+                          }
+                        }}
+                        disabled={!canPractice}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold truncate">{folder.name}</div>
+                          <div className="text-sm text-muted-foreground font-normal">
+                            {(folder.newCount ?? 0) + (folder.reviewCount ?? 0)} từ vựng
+                            {!canPractice && <span className="text-orange-500 ml-2">(Chưa có flashcard)</span>}
+                          </div>
                         </div>
-                      </div>
-                    </Button>
-                  </motion.div>
-                ))}
+                      </Button>
+                    </motion.div>
+                  );
+                })}
+
+                {/* Load more trigger */}
+                {pagination?.hasMore && (
+                  <div ref={loadMoreRef} className="py-4 flex justify-center">
+                    {loadingMore && <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />}
+                  </div>
+                )}
               </div>
             )}
           </div>
         </DialogContent>
       </Dialog>
 
-      <CreateFolderModal
+      <CreateFlashbookModal
         open={isCreateModalOpen}
         onOpenChange={setIsCreateModalOpen}
         onSuccess={() => {
           fetchFolders(true);
         }}
-      />
-      <AIAssistantModal
-        open={isAIModalOpen}
-        onOpenChange={setIsAIModalOpen}
-        onSuccess={() => {
-          fetchFolders(true);
-        }}
+        defaultTab={defaultTab}
       />
     </>
   );
