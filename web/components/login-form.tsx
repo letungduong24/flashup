@@ -24,7 +24,7 @@ export function LoginForm({
 }: React.ComponentProps<"form">) {
   const router = useRouter();
   const { signin, signInLoading } = useAuthStore();
-  
+
   const {
     register,
     handleSubmit,
@@ -43,8 +43,8 @@ export function LoginForm({
   };
 
   return (
-    <form 
-      className={cn("flex flex-col gap-6", className)} 
+    <form
+      className={cn("flex flex-col gap-6", className)}
       onSubmit={handleSubmit(onSubmit)}
       {...props}
     >
@@ -54,10 +54,10 @@ export function LoginForm({
         </div>
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
-          <Input 
-            id="email" 
-            type="email" 
-            placeholder="m@example.com" 
+          <Input
+            id="email"
+            type="email"
+            placeholder="m@example.com"
             {...register("email")}
             aria-invalid={errors.email ? "true" : "false"}
           />
@@ -73,9 +73,9 @@ export function LoginForm({
               Quên mật khẩu?
             </a>
           </div>
-          <Input 
-            id="password" 
-            type="password" 
+          <Input
+            id="password"
+            type="password"
             {...register("password")}
             aria-invalid={errors.password ? "true" : "false"}
           />
@@ -88,7 +88,13 @@ export function LoginForm({
         </Field>
         <FieldSeparator>Hoặc đăng nhập với</FieldSeparator>
         <Field>
-          <Button variant="outline" type="button">
+          <Button
+            variant="outline"
+            type="button"
+            onClick={() => {
+              window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
+            }}
+          >
             <FaGoogle />
             Đăng nhập với Google
           </Button>

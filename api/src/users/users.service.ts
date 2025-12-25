@@ -19,8 +19,11 @@ export class UsersService {
       throw new ConflictException('Email đã được sử dụng');
     }
 
-    const hashedPassword = await hashPassword(signUpRequest.password);
-    this.logger.debug(`Hashed password for ${signUpRequest.email}, hash length: ${hashedPassword.length}, starts with: ${hashedPassword.substring(0, 7)}`);
+    let hashedPassword: string | null = null;
+    if (signUpRequest.password) {
+      hashedPassword = await hashPassword(signUpRequest.password);
+      this.logger.debug(`Hashed password for ${signUpRequest.email}, hash length: ${hashedPassword.length}, starts with: ${hashedPassword.substring(0, 7)}`);
+    }
 
     // Ensure password is properly hashed and not overwritten by spread
     const { password: _, ...restSignUpData } = signUpRequest;

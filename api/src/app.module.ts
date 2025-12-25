@@ -11,23 +11,24 @@ import { FoldersModule } from './folders/folders.module';
 import { FlashcardsModule } from './flashcards/flashcards.module';
 import { StudyModule } from './study/study.module';
 import { PracticeModule } from './practice/practice.module';
-import { RedisModule } from './redis/redis.module';
 import { AttendanceModule } from './attendance/attendance.module';
 
 @Module({
   imports: [
-    UsersModule, 
+    UsersModule,
     PrismaModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env', '../.env']
+    }),
     AuthModule,
     FoldersModule,
     FlashcardsModule,
     StudyModule,
     PracticeModule,
-    RedisModule,
     AttendanceModule,
   ],
-  controllers: [AppController, ],
+  controllers: [AppController,],
   providers: [
     AppService,
     {
@@ -37,4 +38,4 @@ import { AttendanceModule } from './attendance/attendance.module';
     AppService
   ],
 })
-export class AppModule {}
+export class AppModule { }

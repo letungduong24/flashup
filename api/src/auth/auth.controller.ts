@@ -1,11 +1,11 @@
-import { 
-  Controller, 
-  Post, 
+import {
+  Controller,
+  Post,
   Get,
-  Body, 
-  Res, 
-  HttpCode, 
-  HttpStatus, 
+  Body,
+  Res,
+  HttpCode,
+  HttpStatus,
   Request,
   UseGuards
 } from '@nestjs/common';
@@ -13,11 +13,12 @@ import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { SignUpDto } from './dto/sign-up.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
@@ -29,11 +30,11 @@ export class AuthController {
     const access_token = await this.authService.login(request.user);
 
     res.cookie('access_token', access_token, {
-      httpOnly: true, 
+      httpOnly: true,
       // Only set secure when explicitly enabled (e.g. HTTPS). For HTTP/IP deployment, keep false.
       secure: process.env.COOKIE_SECURE === 'true',
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000, 
+      maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/',
     });
 
@@ -48,7 +49,7 @@ export class AuthController {
   ) {
     const { user, access_token } = await this.authService.signUp(signUpDto);
     res.cookie('access_token', access_token, {
-      httpOnly: true, 
+      httpOnly: true,
       secure: process.env.COOKIE_SECURE === 'true',
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -69,6 +70,31 @@ export class AuthController {
     res.clearCookie('access_token');
     res.clearCookie('refresh_token');
     return { message: 'Đăng xuất thành công' };
+  }
+
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuth(@Request() req) { }
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuthRedirect(@Request() req, @Res() res: Response) {
+    const user = await this.authService.validateGoogleUser(req.user);
+    if (!user) {
+      return res.redirect(`${process.env.FRONTEND_URL}/auth/login?error=Google_Auth_Failed`);
+    }
+
+    const access_token = await this.authService.login(user);
+
+    res.cookie('access_token', access_token, {
+      httpOnly: true,
+      secure: process.env.COOKIE_SECURE === 'true',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: '/',
+    });
+
+    return res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   }
 
 }
