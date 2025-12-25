@@ -25,6 +25,7 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
+    image: ldngduong/flashup-api:latest
     restart: unless-stopped
     depends_on:
       postgres:
@@ -49,6 +50,7 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_URL: https://api.flashcard.duongle.site
+    image: ldngduong/flashup-web:latest
     restart: unless-stopped
     depends_on:
       api:
