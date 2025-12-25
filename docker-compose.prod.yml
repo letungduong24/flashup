@@ -37,11 +37,11 @@ services:
       PORT: 8000
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       FRONTEND_URL: https://flashcard.duongle.site
-      API_URL: https://api.flashcard.duongle.site
+      API_URL: https://flashcard-api.duongle.site
       # Pass specific Google Auth variables
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      GOOGLE_CALLBACK_URL: https://api.flashcard.duongle.site/auth/google/callback
+      GOOGLE_CALLBACK_URL: https://flashcard-api.duongle.site/auth/google/callback
       COOKIE_SECURE: "true"
       
   web:
@@ -49,7 +49,7 @@ services:
       context: ./web
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: https://api.flashcard.duongle.site
+        NEXT_PUBLIC_API_URL: https://flashcard-api.duongle.site
     image: ldngduong/flashup-web:latest
     restart: unless-stopped
     depends_on:
@@ -60,7 +60,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
-      NEXT_PUBLIC_API_URL: https://api.flashcard.duongle.site
+      NEXT_PUBLIC_API_URL: https://flashcard-api.duongle.site
 
   nginx:
     image: nginx:alpine
