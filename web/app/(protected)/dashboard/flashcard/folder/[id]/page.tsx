@@ -274,15 +274,15 @@ export default function FolderDetailPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.25, duration: 0.4 }}
               >
-                <h1 className='font-bold text-white text-xl'>Học Flashbook</h1>
+                <h1 className='font-bold text-white text-lg'>Học Flashbook</h1>
               </motion.div>
             </motion.div>
 
             {/* Practice Button */}
             <motion.div
               className={`group cursor-pointer p-4 rounded-2xl flex flex-col justify-center items-start ${(pagination?.total || 0) === 0
-                  ? 'bg-gray-400 dark:bg-gray-600'
-                  : 'bg-gradient-to-br from-blue-300 to-blue-500'
+                ? 'bg-gray-400 dark:bg-gray-600'
+                : 'bg-gradient-to-br from-blue-300 to-blue-500'
                 }`}
               onClick={() => {
                 if ((pagination?.total || 0) > 0) {
@@ -321,7 +321,7 @@ export default function FolderDetailPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.27, duration: 0.4 }}
               >
-                <h1 className='font-bold text-white text-xl'>Luyện tập</h1>
+                <h1 className='font-bold text-white text-lg'>Luyện tập</h1>
               </motion.div>
             </motion.div>
           </div>

@@ -19,7 +19,8 @@ import {
   Pause,
   RefreshCw,
   Loader2,
-  PartyPopper
+  PartyPopper,
+  BookOpen
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { BsFolder } from "react-icons/bs";
@@ -217,7 +218,7 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle>Thống kê</CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 flex items-center">
+            <CardContent className="flex-1 flex flex-col justify-center gap-6">
               <div className="grid grid-cols-2 xl:grid-cols-4 gap-6 w-full">
                 <div className="flex flex-col items-center gap-1">
                   {loadingSummary ? (
@@ -254,6 +255,25 @@ export default function DashboardPage() {
                   )}
                   <p className="text-sm text-muted-foreground">Cần review</p>
                 </div>
+              </div>
+
+              <div className="flex flex-col md:flex-row gap-4 w-full">
+                <Button
+                  className="flex-1"
+                  variant="default"
+                  onClick={() => router.push('/dashboard/flashcard')}
+                >
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Học Flashbook
+                </Button>
+                <Button
+                  className="flex-1"
+                  variant="outline"
+                  onClick={() => router.push('/dashboard/practice')}
+                >
+                  <Play className="mr-2 h-4 w-4" />
+                  Luyện tập
+                </Button>
               </div>
             </CardContent>
           </Card>
