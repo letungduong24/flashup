@@ -12,6 +12,7 @@ import { Loader2 } from "lucide-react";
 import { FlashcardResponse } from '@/types/flashcard';
 import useFlashcardStore from "@/store/flashcard.store";
 import { playAudioWithFallback } from "@/lib/audio-utils";
+import { toast } from "sonner";
 
 type StudyAction =
   | 'new_forgot'
